@@ -15,10 +15,10 @@ function App() {
 
   useAgentTool(
     "switchTab",
-    {
-      tab: z.enum(["tab1", "tab2", "tab3"]),
-    },
-    async ({ tab }) => setTab(tab),
+    z.object({
+      activeTab: z.enum(["tab1", "tab2", "tab3"]),
+    }),
+    async ({ activeTab }) => setTab(activeTab),
   );
 
   const [apiKey, setOpenaiApiKey] = useState(localStorage.getItem("react-agent:openai-api-key") ?? "");

@@ -1,6 +1,9 @@
 import OpenAI from "openai";
+import {} from "openai/helpers/zod";
 import { useEffect, useState } from "react";
 import { stringify } from "yaml";
+import { ZodSchema } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 
 export type AgentStateItem = AgentResourceItem | AgentToolItem;
 export interface AgentResourceItem {
@@ -9,7 +12,7 @@ export interface AgentResourceItem {
 }
 export interface AgentToolItem {
   type: "tool";
-  params: any;
+  params: ZodSchema<any>;
   callback: (args: any) => any;
 }
 
@@ -36,21 +39,58 @@ export function useAgentTool(name: string, params: any, callback: (args: any) =>
 export function useAgent(options: { apiKey: string }) {
   const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: options.apiKey });
 
-  const run = (prompt: string) =>
-    openai.beta.chat.completions.runTools({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: ``.trim(),
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      tools: [],
-    });
+  const run = async (prompt: string) => {
+    const task = openai.beta.chat.completions
+      .runTools({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: `
+User is interacting with a web app in the following state:
+\`\`\`yaml
+${debugResources()}
+\`\`\`
+
+Based on user's instruction or goals, you can either answer user's question based on app state, or use on of the provided tools to update the state.
+          `.trim(),
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        tools: [...agentState.entries()]
+          .filter(([_k, value]) => value.type === "tool")
+          .map(([name, item]) => ({
+            type: "function",
+            function: {
+              name,
+              parse: zodParseJSON((item as AgentToolItem).params),
+              function: async (args: any) => {
+                try {
+                  await (item as AgentToolItem).callback(args);
+                  await new Promise((resolve) => setTimeout(resolve, 10));
+
+                  return `
+Updated state:
+\`\`\`yaml
+${debugResources()}
+\`\`\`
+              `.trim();
+                } catch (e: any) {
+                  return `Error: ${[e?.name, e?.message].filter(Boolean).join(" ")}`;
+                }
+              },
+              parameters: zodToJsonSchema((item as AgentToolItem).params),
+            } as any,
+          })),
+      })
+      .on("message", (message) => console.log(message));
+
+    const finalContent = await task.finalContent();
+    console.log("Final content:", finalContent);
+  };
 
   const abort = () => {};
 
@@ -95,4 +135,8 @@ ${debugTools()}
     abort,
     debug,
   };
+}
+
+function zodParseJSON<T>(schema: ZodSchema<T>) {
+  return (input: string): T => schema.parse(JSON.parse(input));
 }
