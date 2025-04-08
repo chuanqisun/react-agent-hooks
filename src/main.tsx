@@ -2,7 +2,7 @@ import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { z } from "zod";
 import "./index.css";
-import { useAgent, useAgentResource, useAgentTool } from "./react-agent-hooks/use-agent";
+import { useAgent, useAgentState, useAgentTool } from "./react-agent-hooks/use-agent";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
 );
 
 function App() {
-  const [tab, setTab] = useAgentResource("activeTab", "tab1");
+  const [tab, setTab] = useAgentState("activeTab", "tab1");
 
   useAgentTool(
     "switchTab",

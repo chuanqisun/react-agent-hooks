@@ -5,9 +5,9 @@ import { stringify } from "yaml";
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 
-export type AgentStateItem = AgentResourceItem | AgentToolItem;
-export interface AgentResourceItem {
-  type: "resource";
+export type AgentItem = AgentStateItem | AgentToolItem;
+export interface AgentStateItem {
+  type: "state";
   data: any;
 }
 export interface AgentToolItem {
@@ -16,14 +16,14 @@ export interface AgentToolItem {
   callback: (args: any) => any;
 }
 
-export const agentState = new Map<string, AgentStateItem>();
+export const agentItemMap = new Map<string, AgentItem>();
 
-export function useAgentResource(name: string, initialValue: any) {
+export function useAgentState(name: string, initialValue: any) {
   const [state, setState] = useState<any>(initialValue);
 
   useEffect(() => {
-    agentState.set(name, { type: "resource", data: state });
-    return () => void agentState.delete(name);
+    agentItemMap.set(name, { type: "state", data: state });
+    return () => void agentItemMap.delete(name);
   }, [name, state]);
 
   return [state, setState];
@@ -31,8 +31,8 @@ export function useAgentResource(name: string, initialValue: any) {
 
 export function useAgentTool(name: string, params: any, callback: (args: any) => any) {
   useEffect(() => {
-    agentState.set(name, { type: "tool", params, callback });
-    return () => void agentState.delete(name);
+    agentItemMap.set(name, { type: "tool", params, callback });
+    return () => void agentItemMap.delete(name);
   }, [name, params, callback]);
 }
 
@@ -49,7 +49,7 @@ export function useAgent(options: { apiKey: string }) {
             content: `
 User is interacting with a web app in the following state:
 \`\`\`yaml
-${debugResources()}
+${debugStates()}
 \`\`\`
 
 Based on user's instruction or goals, you can either answer user's question based on app state, or use on of the provided tools to update the state.
@@ -60,7 +60,7 @@ Based on user's instruction or goals, you can either answer user's question base
             content: prompt,
           },
         ],
-        tools: [...agentState.entries()]
+        tools: [...agentItemMap.entries()]
           .filter(([_k, value]) => value.type === "tool")
           .map(([name, item]) => ({
             type: "function",
@@ -75,7 +75,7 @@ Based on user's instruction or goals, you can either answer user's question base
                   return `
 Updated state:
 \`\`\`yaml
-${debugResources()}
+${debugStates()}
 \`\`\`
               `.trim();
                 } catch (e: any) {
@@ -94,11 +94,11 @@ ${debugResources()}
 
   const abort = () => {};
 
-  const debugResources = () => {
+  const debugStates = () => {
     const printItems: any[] = [];
-    agentState.forEach((value, key) => {
+    agentItemMap.forEach((value, key) => {
       switch (value.type) {
-        case "resource":
+        case "state":
           printItems.push([key, value.data]);
           break;
       }
@@ -109,7 +109,7 @@ ${debugResources()}
 
   const debugTools = () => {
     const printItems: any[] = [];
-    agentState.forEach((value, key) => {
+    agentItemMap.forEach((value, key) => {
       switch (value.type) {
         case "tool":
           printItems.push([key, "<zod>"]);
@@ -122,8 +122,8 @@ ${debugResources()}
 
   const debug = () => {
     return `
-Resources
-${debugResources()}
+States
+${debugStates()}
 
 Tools
 ${debugTools()}
