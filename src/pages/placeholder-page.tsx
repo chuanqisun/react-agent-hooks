@@ -1,6 +1,6 @@
 import { z } from "zod";
 import demoData from "../data/main.json";
-import { useAgentState, useAgentTool } from "../react-agent-hooks/use-agent";
+import { useAgentState, useAgentTool } from "../react-agent-hooks/agent-hooks";
 
 export function PlaceholderPage() {
   const [tab, setTab] = useAgentState("activeTab", "tab1");

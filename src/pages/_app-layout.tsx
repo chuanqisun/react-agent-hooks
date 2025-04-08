@@ -1,7 +1,8 @@
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import { useAgent } from "../react-agent-hooks/use-agent";
+import { useAgentDebug } from "../react-agent-hooks/agent-hooks";
+import { useAgent } from "../react-agent-hooks/use-agent.ts";
 
 export function AppLayout() {
   const [apiKey, setOpenaiApiKey] = useState(localStorage.getItem("react-agent:openai-api-key") ?? "");
@@ -15,6 +16,7 @@ export function AppLayout() {
   };
 
   const agent = useAgent({ apiKey });
+  const agentDebug = useAgentDebug();
 
   const handleSubmit = async () => {
     setPrompt("");
@@ -27,7 +29,7 @@ export function AppLayout() {
     }
   };
 
-  const handleDebugState = () => console.log(agent.dump());
+  const handleDebugState = () => console.log(agentDebug.dump());
 
   const apiKeyDialogRef = useRef<HTMLDialogElement>(null);
 

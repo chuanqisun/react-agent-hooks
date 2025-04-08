@@ -1,56 +1,24 @@
 import OpenAI from "openai";
-import {} from "openai/helpers/zod";
-import { useEffect, useMemo, useState } from "react";
 import { stringify } from "yaml";
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-
-export type AgentItem = AgentStateItem | AgentToolItem;
-export interface AgentStateItem {
-  type: "state";
-  data: any;
-}
-export interface AgentToolItem {
-  type: "tool";
-  params: ZodSchema<any>;
-  callback: (args: any) => any;
-}
-
-export const agentItemMap = new Map<string, AgentItem>();
-
-export function useAgentMemo<T>(name: string, transform: () => T, deps: any[]) {
-  useEffect(() => {
-    agentItemMap.set(name, { type: "state", data: transform() });
-    return () => void agentItemMap.delete(name);
-  }, [name, transform]);
-
-  return useMemo(() => {
-    const newValue = transform();
-    agentItemMap.set(name, { type: "state", data: transform() });
-    return newValue;
-  }, [name, transform, ...deps]);
-}
-
-export function useAgentState(name: string, initialValue: any) {
-  const [state, setState] = useState<any>(initialValue);
-
-  useEffect(() => {
-    agentItemMap.set(name, { type: "state", data: state });
-    return () => void agentItemMap.delete(name);
-  }, [name, state]);
-
-  return [state, setState];
-}
-
-export function useAgentTool(name: string, params: any, callback: (args: any) => any) {
-  useEffect(() => {
-    agentItemMap.set(name, { type: "tool", params, callback });
-    return () => void agentItemMap.delete(name);
-  }, [name, params, callback]);
-}
+import { AgentToolItem, implicitRootAgentContext } from "./agent-hooks";
 
 export function useAgent(options: { apiKey: string }) {
   const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: options.apiKey });
+
+  const printStates = () => {
+    const printItems: any[] = [];
+    implicitRootAgentContext.forEach((value, key) => {
+      switch (value.type) {
+        case "state":
+          printItems.push([key, value.data]);
+          break;
+      }
+    });
+
+    return stringify(Object.fromEntries(printItems));
+  };
 
   const run = async (prompt: string) => {
     const task = openai.beta.chat.completions
@@ -62,7 +30,7 @@ export function useAgent(options: { apiKey: string }) {
             content: `
 User is interacting with a web app in the following state:
 \`\`\`yaml
-${debugStates()}
+${printStates()}
 \`\`\`
 
 Based on user's instruction or goals, you can either answer user's question based on app state, or use on of the provided tools to update the state.
@@ -73,7 +41,7 @@ Based on user's instruction or goals, you can either answer user's question base
             content: prompt,
           },
         ],
-        tools: [...agentItemMap.entries()]
+        tools: [...implicitRootAgentContext.entries()]
           .filter(([_k, value]) => value.type === "tool")
           .map(([name, item]) => ({
             type: "function",
@@ -88,7 +56,7 @@ Based on user's instruction or goals, you can either answer user's question base
                   return `
 Updated state:
 \`\`\`yaml
-${debugStates()}
+${printStates()}
 \`\`\`
               `.trim();
                 } catch (e: any) {
@@ -107,51 +75,9 @@ ${debugStates()}
 
   const abort = () => {};
 
-  const debugStates = () => {
-    const printItems: any[] = [];
-    agentItemMap.forEach((value, key) => {
-      switch (value.type) {
-        case "state":
-          printItems.push([key, value.data]);
-          break;
-      }
-    });
-
-    return stringify(Object.fromEntries(printItems));
-  };
-
-  const debugTools = () => {
-    const printItems: any[] = [];
-    agentItemMap.forEach((value, key) => {
-      switch (value.type) {
-        case "tool":
-          printItems.push([key, "<zod>"]);
-          break;
-      }
-    });
-
-    return stringify(Object.fromEntries(printItems));
-  };
-
-  const dump = () => {
-    return Object.fromEntries(agentItemMap.entries());
-  };
-
-  const debug = () => {
-    return `
-States
-${debugStates()}
-
-Tools
-${debugTools()}
-    `.trim();
-  };
-
   return {
     run,
     abort,
-    debug,
-    dump,
   };
 }
 
