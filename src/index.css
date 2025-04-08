@@ -12,3 +12,29 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+body {
+  width: calc(100% - 4rem);
+  max-width: 40rem;
+  margin: auto;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+}
+
+.rows {
+  display: grid;
+  gap: 8px;
+}
+
+textarea {
+  field-sizing: content;
+}
+
+input,
+textarea,
+button {
+  padding: 0.5rem;
+}
