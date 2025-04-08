@@ -1,7 +1,7 @@
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import { useAgentDebug } from "../react-agent-hooks/agent-hooks";
+import { useAgentDebug } from "../react-agent-hooks";
 import { useAgent } from "../react-agent-hooks/use-agent.ts";
 
 export function AppLayout() {

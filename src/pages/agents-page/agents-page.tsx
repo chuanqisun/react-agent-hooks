@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { NavLink } from "react-router";
 import { z } from "zod";
-import { useAgentMemo, useAgentTool } from "../../react-agent-hooks/agent-hooks";
+import { useAgentMemo, useAgentTool } from "../../react-agent-hooks";
 import { listMyAgents } from "./get-agents";
 
 export function AgentsPage() {
