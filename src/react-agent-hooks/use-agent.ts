@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import {} from "openai/helpers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { stringify } from "yaml";
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
@@ -17,6 +17,19 @@ export interface AgentToolItem {
 }
 
 export const agentItemMap = new Map<string, AgentItem>();
+
+export function useAgentMemo<T>(name: string, transform: () => T, deps: any[]) {
+  useEffect(() => {
+    agentItemMap.set(name, { type: "state", data: transform() });
+    return () => void agentItemMap.delete(name);
+  }, [name, transform]);
+
+  return useMemo(() => {
+    const newValue = transform();
+    agentItemMap.set(name, { type: "state", data: transform() });
+    return newValue;
+  }, [name, transform, ...deps]);
+}
 
 export function useAgentState(name: string, initialValue: any) {
   const [state, setState] = useState<any>(initialValue);
@@ -120,6 +133,10 @@ ${debugStates()}
     return stringify(Object.fromEntries(printItems));
   };
 
+  const dump = () => {
+    return Object.fromEntries(agentItemMap.entries());
+  };
+
   const debug = () => {
     return `
 States
@@ -134,6 +151,7 @@ ${debugTools()}
     run,
     abort,
     debug,
+    dump,
   };
 }
 

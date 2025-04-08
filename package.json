@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.72.1",
+    "nuqs": "^2.4.1",
     "openai": "^4.92.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
