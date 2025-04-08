@@ -1,6 +1,6 @@
 import { z } from "zod";
 import data from "../data/main.json";
-import { useAgentState, useAgentTool } from "../react-agent-hooks/agent-hooks";
+import { useAgentState, useAgentTool } from "../react-agent-hooks";
 
 export function TemplatesPage() {
   // useAgentMemo("agent-templates", () => data.agentTemplates, [data.agentTemplates]);

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ZodSchema } from "zod";
 import { implicitRootAgentContext } from "./agent-hooks";
 
-export function useAgentTool(name: string, params: ZodSchema<any>, callback: (params: any) => any) {
+export function useAgentTool<T, K>(name: string, params: ZodSchema<T>, callback: (params: T) => K) {
   useEffect(() => {
     implicitRootAgentContext.set(name, { type: "tool", params, callback });
     return () => void implicitRootAgentContext.delete(name);
