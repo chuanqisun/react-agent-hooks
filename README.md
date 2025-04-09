@@ -1,4 +1,4 @@
-# React Agent Hooks
+# React Agent Hooks Demo
 
 An Agentic State Manager built on top of React Hooks.
 
