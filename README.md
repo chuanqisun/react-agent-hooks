@@ -152,3 +152,70 @@ function ChildComponent() {
   return <div>...</div>;
 }
 ```
+
+### Additional Context
+
+The `AgentContext` is optionally React Context to help you
+hierarchically organizing states and tools. This can reduce
+error when working with large number of states and tools.
+
+```tsx
+import { AgentContext } from "react-agent-hooks";
+
+function MyApp() {
+  return (
+    <AgentContext name="app root">
+      <AgentContext name="nav">
+        <Nav />
+      </AgentContext>
+      <AgentContext name="content">
+        <header>
+          <AgentContext name="header">
+            <HeaderContent />
+          </AgentContext>
+        </header>
+        <main>
+          <AgentContext name="main">
+            <MainContent />
+          </AgentContext>
+        </main>
+      </AgentContext>
+    </AgentContext>
+  );
+}
+
+function HeaderContent() {
+  // The Agent will see this state appear within the "app root > nav > header" context
+  const [someState, setSomeState] = useAgentState("some state", { name: "Some state" });
+  return <div>...</div>;
+}
+```
+
+### Future Work
+
+Render to MCP Server
+
+```tsx
+import { renderToMCPServer } from "react-agent-hooks";
+
+function main() {
+  // Spin up an MCP server at port 3000.
+  // React Agent state -> MCP resource and prompts
+  // React Agent tools -> MCP tools
+  const server = renderToMCPServer(<App />).listen(3000);
+}
+```
+
+Render to llms.txt
+
+```tsx
+import { renderToLlmsTxt } from "react-agent-hooks";
+
+function main() {
+  server.get("/llms.txt", (req, res) => {
+    const userContext = req.query.userContext;
+    const llmsTxtContent = renderToLlmsTxt(<App context={userContext} />);
+    res.send(llmsTxtContent);
+  });
+}
+```
