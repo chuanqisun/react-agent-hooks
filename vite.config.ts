@@ -8,6 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "lib/index.ts"),
+      formats: ["es"],
       name: "ReactAgentHooks",
       fileName: "react-agent-hooks",
     },

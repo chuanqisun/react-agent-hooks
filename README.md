@@ -1,6 +1,6 @@
 # React Agent Hooks Demo
 
-An Agentic State Manager built on top of React Hooks.
+Hooks that add Agent usability to your existing React app
 
 - 🤝 Symbiotic: human interface and agent interface derived from the same state.
 - 🛡️ Safe: developer controls the schema for Agentic state change.
