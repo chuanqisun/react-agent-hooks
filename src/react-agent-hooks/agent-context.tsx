@@ -5,11 +5,13 @@ export type AgentItem = AgentStateItem | AgentToolItem;
 export interface AgentStateItem {
   type: "state";
   data: any;
+  context?: ExplicitAgentContext;
 }
 export interface AgentToolItem {
   type: "tool";
   params: ZodSchema<any>;
   callback: (args: any) => any;
+  context?: ExplicitAgentContext;
 }
 
 export interface ExplicitAgentContext {
