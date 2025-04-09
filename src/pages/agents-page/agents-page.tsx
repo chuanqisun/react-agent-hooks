@@ -10,31 +10,27 @@ export function AgentsPage() {
 
   const [sortBy, setSortBy] = useQueryState("sort-by", { defaultValue: "name" });
 
-  useAgentMemo("sort-by", { factory: () => sortBy });
+  useAgentMemo("sort-by", () => sortBy);
 
-  const displayItems = useAgentMemo("my-agents", {
-    factory: () => {
-      if (!query.data) return [];
+  const displayItems = useAgentMemo("my-agents", () => {
+    if (!query.data) return [];
 
-      return query.data.slice().sort((a, b) => {
-        const field = sortBy as keyof typeof a;
-        const valueA = a[field];
-        const valueB = b[field];
+    return query.data.slice().sort((a, b) => {
+      const field = sortBy as keyof typeof a;
+      const valueA = a[field];
+      const valueB = b[field];
 
-        if (typeof valueA === "string" && typeof valueB === "string") {
-          return valueA.localeCompare(valueB);
-        }
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return valueA.localeCompare(valueB);
+      }
 
-        return String(valueA).localeCompare(String(valueB));
-      });
-    },
-    dependencies: [query.data],
+      return String(valueA).localeCompare(String(valueB));
+    });
   });
 
-  useAgentTool("sort-my-agents", {
-    params: z.object({ sortBy: z.enum(["name", "description", "model"]) }),
-    run: (args) => setSortBy(args.sortBy),
-  });
+  useAgentTool("sort-my-agents", z.object({ sortBy: z.enum(["name", "description", "model"]) }), (args) =>
+    setSortBy(args.sortBy),
+  );
 
   return (
     <table className="agents-table">

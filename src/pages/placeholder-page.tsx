@@ -3,12 +3,11 @@ import demoData from "../data/main.json";
 import { useAgentState, useAgentTool } from "../react-agent-hooks";
 
 export function PlaceholderPage() {
-  const [tab, setTab] = useAgentState("activeTab", { intialValue: "tab1" });
+  const [tab, setTab] = useAgentState("activeTab", "tab1");
 
-  useAgentTool("switchTab", {
-    params: z.object({ activeTab: z.enum(["tab1", "tab2", "tab3"]) }),
-    run: async ({ activeTab }) => setTab(activeTab),
-  });
+  useAgentTool("switchTab", z.object({ activeTab: z.enum(["tab1", "tab2", "tab3"]) }), async ({ activeTab }) =>
+    setTab(activeTab),
+  );
 
   return (
     <>

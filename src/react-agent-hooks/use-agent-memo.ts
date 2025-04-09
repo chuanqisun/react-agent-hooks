@@ -3,18 +3,19 @@ import { implicitRootAgentContext } from "./agent-hooks";
 
 export function useAgentMemo<T>(
   name: string,
-  options: { description?: string; factory: () => T; dependencies?: unknown[] },
+  factory: () => T,
+  options?: { description?: string; dependencies?: unknown[] },
 ): T {
-  const [latestValue, setLatestValue] = useState<T>(options.factory());
+  const [latestValue, setLatestValue] = useState<T>(factory());
 
   useEffect(
     () => {
-      const newValue = options.factory();
+      const newValue = factory();
       implicitRootAgentContext.set(name, { type: "state", data: newValue });
       setLatestValue(newValue);
       return () => void implicitRootAgentContext.delete(name);
     },
-    options.dependencies ? [name, options.factory, ...options.dependencies] : (undefined as any),
+    options?.dependencies ? [name, factory, ...options?.dependencies] : (undefined as any),
   );
 
   return latestValue;

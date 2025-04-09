@@ -4,12 +4,14 @@ import { implicitRootAgentContext } from "./agent-hooks";
 
 export function useAgentTool<T, K>(
   name: string,
-  options: { description?: string; params: ZodSchema<T>; run: (params: T) => K | Promise<K> },
+  params: ZodSchema<T>,
+  run: (params: T) => K | Promise<K>,
+  options?: { description?: string; dependencies?: unknown[] },
 ) {
   useEffect(() => {
-    implicitRootAgentContext.set(name, { type: "tool", params: options.params, callback: options.run });
+    implicitRootAgentContext.set(name, { type: "tool", params, callback: run });
     return () => void implicitRootAgentContext.delete(name);
-  }, [name, options.params, options.run]);
+  }, [name, params, run, ...(options?.dependencies ?? [])]);
 
-  return options.run;
+  return run;
 }
