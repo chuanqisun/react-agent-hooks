@@ -7,6 +7,13 @@
     "dist",
     "lib"
   ],
+  "license": "MIT",
+  "module": "./dist/react-agent-hooks.js",
+  "exports": {
+    ".": {
+      "import": "./dist/react-agent-hooks.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build"
