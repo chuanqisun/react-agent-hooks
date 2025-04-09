@@ -10,11 +10,10 @@ export function AgentsPage() {
 
   const [sortBy, setSortBy] = useQueryState("sort-by", { defaultValue: "name" });
 
-  useAgentMemo("sort-by", () => sortBy, [sortBy]);
+  useAgentMemo("sort-by", { factory: () => sortBy });
 
-  const displayItems = useAgentMemo(
-    "my-agents",
-    () => {
+  const displayItems = useAgentMemo("my-agents", {
+    factory: () => {
       if (!query.data) return [];
 
       return query.data.slice().sort((a, b) => {
@@ -29,12 +28,13 @@ export function AgentsPage() {
         return String(valueA).localeCompare(String(valueB));
       });
     },
-    [query.data],
-  );
+    dependencies: [query.data],
+  });
 
-  useAgentTool("sort-my-agents", z.object({ sortBy: z.enum(["name", "description", "model"]) }), (args) =>
-    setSortBy(args.sortBy),
-  );
+  useAgentTool("sort-my-agents", {
+    params: z.object({ sortBy: z.enum(["name", "description", "model"]) }),
+    run: (args) => setSortBy(args.sortBy),
+  });
 
   return (
     <table className="agents-table">
