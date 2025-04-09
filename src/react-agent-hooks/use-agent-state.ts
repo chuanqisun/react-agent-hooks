@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { implicitRootAgentContext } from "./agent-hooks";
 
 export function useAgentState<S>(name: string, initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];

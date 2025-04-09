@@ -5,9 +5,7 @@ import { useAgentState, useAgentTool } from "../react-agent-hooks";
 export function PlaceholderPage() {
   const [tab, setTab] = useAgentState("activeTab", "tab1");
 
-  useAgentTool("switchTab", z.object({ activeTab: z.enum(["tab1", "tab2", "tab3"]) }), async ({ activeTab }) =>
-    setTab(activeTab),
-  );
+  useAgentTool("switchTab", z.enum(["tab1", "tab2", "tab3"]), async (activeTab) => setTab(activeTab));
 
   return (
     <>
