@@ -1,5 +1,5 @@
 import React, { createContext, useContext, type PropsWithChildren } from "react";
-import { ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 
 export type AgentItem = AgentStateItem | AgentToolItem;
 export interface AgentStateItem {

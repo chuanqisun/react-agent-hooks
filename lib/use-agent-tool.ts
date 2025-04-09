@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { z, ZodObject, ZodSchema } from "zod";
+import { z, ZodObject, type ZodSchema } from "zod";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
 
 export function useAgentTool<T, K>(
