@@ -4,48 +4,9 @@ Augment your UI for Agent interaction.
 
 ## Example
 
-Before
-
-```tsx
-import { useState, useCallback } from "react";
-
-function MyComponent() {
-  const [name, setName] = useState("John Doe");
-  const [age, setAge] = useState(30);
-  const increase = useCallback((increment) => setAge((prev) => prev + increment), []);
-
-  return (
-    <div>
-      <h1>{name}</h1>
-      <p>{age}</p>
-      <button onClick={() => increase(5)}>Increase Age</button>
-    </div>
-  );
-}
-```
-
-After
-
-```tsx
-import { useAgent, useAgentState, useAgentTool } from "react-agent-hooks";
-
-export function MyComponent() {
-  const agent = useAgent({ apiKey: "******" });
-  const [name, setName] = useAgentState("name", "John Doe");
-  const [age, setAge] = useAgentState("age", 30);
-  const increase = useAgentTool("increase-age", z.object({ increment: z.number() }), (increment) =>
-    setAge((prev) => prev + increment),
-  );
-
-  return (
-    <div>
-      <h1>{name}</h1>
-      <p>{age}</p>
-      <button onClick={() => agent.submit("increase the age by a little bit")}>Increase Age</button>
-    </div>
-  );
-}
-```
+| Before                                            | After                                          |
+| ------------------------------------------------- | ---------------------------------------------- |
+| [![Before](./docs/before.svg)](./docs/before.svg) | [![After](./docs/after.svg)](./docs/after.svg) |
 
 ## Get Started
 
