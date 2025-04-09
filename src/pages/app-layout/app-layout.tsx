@@ -1,9 +1,10 @@
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import { useAgentDebug } from "../react-agent-hooks";
-import { AgentContext } from "../react-agent-hooks/agent-context";
-import { useAgent } from "../react-agent-hooks/use-agent.ts";
+import { AgentContext } from "../../react-agent-hooks/agent-context.tsx";
+import { useAgentDebug } from "../../react-agent-hooks/index.ts";
+import { useAgent } from "../../react-agent-hooks/use-agent.ts";
+import { AppNav } from "./app-nav.tsx";
 
 export function AppLayout() {
   const [apiKey, setOpenaiApiKey] = useState(localStorage.getItem("react-agent:openai-api-key") ?? "");
@@ -63,12 +64,7 @@ export function AppLayout() {
         </header>
         <nav>
           <AgentContext name="nav">
-            <div className="c-nav">
-              <NavLink to="/templates">Templates</NavLink>
-              <NavLink to="/agents">Agents</NavLink>
-              <NavLink to="/workflows">Workflows</NavLink>
-              <NavLink to="/builder">Builder</NavLink>
-            </div>
+            <AppNav />
           </AgentContext>
         </nav>
         <main>
