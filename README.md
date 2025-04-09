@@ -1,6 +1,6 @@
 # React Agent Hooks
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-agent-hooks-todo?file=src%2Fmain.jsx)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks)
 
 Hooks that add Agent usability to your existing React app
 
