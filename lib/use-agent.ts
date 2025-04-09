@@ -72,6 +72,7 @@ ${printStates()}
 
     const finalContent = await task.finalContent();
     console.log("Final content:", finalContent);
+    return finalContent;
   };
 
   const abort = () => {};
