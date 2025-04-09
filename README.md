@@ -5,7 +5,7 @@ An Agentic State Manager built on top of React Hooks.
 - 🤝 Simbiotic: human interface and agent interface derived from the same state.
 - 🛡️ Safe: developer controls the schema for Agentic state change.
 - ➕ Incremental adoption: use as much or as little as you want.
-- 📦 Composible: fully interoperable with classic React hooks.
+- 📦 Composable: fully interoperable with classic React hooks.
 - 🔮 Future-ready: forward-compatible with MCP and llms.txt.
 
 **Before**
