@@ -10,9 +10,7 @@ export function AppNav() {
   ];
 
   const navigate = useNavigate();
-  useAgentTool("navigate", z.object({ to: z.enum(routes.map((r) => r.to) as any) }), (args) => {
-    navigate(args.to);
-  });
+  useAgentTool("navigate", z.object({ to: z.enum(routes.map((r) => r.to) as any) }), (args) => navigate(args.to));
 
   return (
     <div className="c-nav">
