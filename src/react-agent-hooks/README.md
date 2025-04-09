@@ -34,14 +34,14 @@ import { useAgentState, useAgentTool } from "react-agent-hooks";
 
 function MyComponent() {
 
-  // states are visible to Agent and shares the identical iterface to react useState hook
-  const [foodPreferences, setFoodPreferences] = useAgentState(["Pizza", "Sushi"]);
+  // fully compatible with react useState. In addition, exposing the state for Agent to read.
+  const [foodPreferences, setFoodPreferences] = useAgentState("food preference", ["Pizza", "Sushi"]);
 
-  // tools let Agent call any functions, including those that change the change
-  useAgentTool("add-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
+  // returns callback for developer to use in code. In addition, exposing the callback for Agent to use.
+  const addFoodPreference = useAgentTool("add-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
     setFoodPreferences((prev) => [...prev, ...foodItems]);
   });
-  useAgentTool("remove-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
+  const removeFoodPreference = useAgentTool("remove-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
     setFoodPreferences((prev) => prev.filter((item) => !foodItems.includes(item)));
   });
 
@@ -56,6 +56,7 @@ import { useAgent } from "react-agent-hooks";
 
 function MyApp() {
   // Run the Agent with a prompt
+  // This Agent can see all the values from `useAgentState`, `useAgentMemo`, and can use any tool from `useAgentTool`
   const agent = useAgent({ apiKey: "******" });
 
   // Call the Agent
