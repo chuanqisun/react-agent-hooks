@@ -1,54 +1,153 @@
-# React + TypeScript + Vite
+# React Agent Hooks
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An Agentic State Manager built on top of React Hooks.
 
-Currently, two official plugins are available:
+- 🤝 Simbiotic: human interface and agent interface derived from the same state.
+- 🛡️ Safe: developer controls the schema for Agentic state change.
+- ➕ Incremental adoption: use as much or as little as you want.
+- 📦 Composible: fully interoperable with classic React hooks.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Before**
 
-## Expanding the ESLint configuration
+```jsx
+import { useCallback, useState } from "react";
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+function MyComponent() {
+  const [name, setName] = useState("John Doe");
+  const [age, setAge] = useState(30);
+  const increase = useCallback((increment) => setAge((prev) => prev + increment), []);
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>{age}</p>
+      <button onClick={() => increase(5)}>Increase Age</button>
+    </div>
+  );
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**After**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```jsx
+import { useAgent, useAgentState, useAgentTool } from "react-agent-hooks";
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+export function MyComponent() {
+  const agent = useAgent({ apiKey: "******" });
+  const [name, setName] = useAgentState("name", "John Doe");
+  const [age, setAge] = useAgentState("age", 30);
+  const increase = useAgentTool("increase-age", z.object({ increment: z.number() }), (increment) =>
+    setAge((prev) => prev + increment),
+  );
+
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>{age}</p>
+      <button onClick={() => agent.submit("increase the age")}>Increase Age</button>
+    </div>
+  );
+}
+```
+
+## Get Started
+
+```sh
+npm install react-agent-hooks
+```
+
+## Usage
+
+### Give Agent the "Eyes"
+
+```tsx
+import { useAgentMemo } from "react-agent-hooks";
+
+function MyComponent() {
+  const [name, setName] = useState("John Doe");
+  const [age, setAge] = useState(30);
+
+  // Describe a readable state to the Agent
+  useAgentMemo("User's profile", () => ({ name, age }), [name, age]);
+
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>{age}</p>
+    </div>
+  );
+}
+```
+
+### Give Agent the "Hands"
+
+```tsx
+import {z} from "zod";
+import { useAgentState, useAgentTool } from "react-agent-hooks";
+
+function MyComponent() {
+
+  // Describe a readable state to the Agent while exposing a setter function to developer
+  const [foodPreferences, setFoodPreferences] = useAgentState("food preference", ["Pizza", "Sushi"]);
+
+  // Describe a tool to the Agent that wraps the setter function
+  const addFoodPreference = useAgentTool("add-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
+    setFoodPreferences((prev) => [...prev, ...foodItems]);
+  });
+  const removeFoodPreference = useAgentTool("remove-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
+    setFoodPreferences((prev) => prev.filter((item) => !foodItems.includes(item)));
+  });
+
+  return <ul>
+    {foodPreferences.map(item => <li key={item}>{item}</li>)}
+    </ul>
+}
+```
+
+### Run the Agent
+
+```tsx
+import { useAgent } from "react-agent-hooks";
+
+function MyApp() {
+  // Run the Agent with a prompt
+  // Agent always sees the latest states from `useAgentState`, `useAgentMemo`, and can uses the latest tools from `useAgentTool`
+  const agent = useAgent({ apiKey: "******" });
+
+  // Call the Agent
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const input = e.target.elements[0].value;
+    agent.submit(input);
+  };
+
+  return (
+    <form onSubmit={handleFormSubmit}>
+      <input type="text" placeholder="Your request" />
+      <button onClick={handleRunAgent}>Ask Agent</button>
+    </form>
+  );
+}
+```
+
+### Compose Agentic Application
+
+```tsx
+function ParentComponent() {
+  // A higher level component can dynamically decide what lower level states/tools are available
+  const = [shouldShowFeature, setShouldShowFeature] = useAgentState("toggle feature", z.boolean(), true);
+
+  useAgentTool("toggle feature", z.object({}), () => setShouldShowFeature(prev) => !prev);
+
+  return <AppRoot>{shouldShowFeatureB ? <ChildComponent /> : null}</AppRoot>;
+}
+
+function ChildComponent() {
+  useAgentState("some state", { name: "Some state" });
+  useAgentTool("update state", z.object({ name: z.string() }), (newState) => {
+    setSomeState(newState);
+  });
+
+  return <div>...</div>;
+}
 ```
