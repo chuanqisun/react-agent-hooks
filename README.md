@@ -11,6 +11,8 @@ Hooks that bring Agents into your React app
 - 📦 Composable: fully interoperable with classic React hooks.
 - 🔮 Future-ready: forward-compatible with MCP and llms.txt.
 
+Project still in beta. Breaking changes are expected.
+
 **Before**
 
 ```jsx
