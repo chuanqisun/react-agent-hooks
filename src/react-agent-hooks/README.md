@@ -2,11 +2,11 @@
 
 Augment your UI for Agent interaction.
 
-## Example
+**Before**
+[![Before](./docs/before.svg)](./docs/before.svg)
 
-| Before                                            | After                                          |
-| ------------------------------------------------- | ---------------------------------------------- |
-| [![Before](./docs/before.svg)](./docs/before.svg) | [![After](./docs/after.svg)](./docs/after.svg) |
+**After**
+[![After](./docs/after.svg)](./docs/after.svg)
 
 ## Get Started
 
