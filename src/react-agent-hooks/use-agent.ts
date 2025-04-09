@@ -34,7 +34,7 @@ User is interacting with a web app in the following state:
 ${printStates()}
 \`\`\`
 
-Based on user's instruction or goals, you can either answer user's question based on app state, or use on of the provided tools to update the state.
+Based on user's instruction or goals, you can either answer user's question based on app state, or use one of the provided tools to update the state.
           `.trim(),
           },
           {
@@ -52,7 +52,7 @@ Based on user's instruction or goals, you can either answer user's question base
               function: async (args: any) => {
                 try {
                   await (item as AgentToolItem).callback(args);
-                  await new Promise((resolve) => setTimeout(resolve, 10));
+                  await new Promise((resolve) => setTimeout(resolve, 10)); // digest react rendering
 
                   return `
 Updated state:
