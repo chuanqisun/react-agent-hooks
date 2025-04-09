@@ -2,6 +2,7 @@ import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import { useAgentDebug } from "../react-agent-hooks";
+import { AgentContext } from "../react-agent-hooks/agent-context";
 import { useAgent } from "../react-agent-hooks/use-agent.ts";
 
 export function AppLayout() {
@@ -61,12 +62,14 @@ export function AppLayout() {
           </dialog>
         </header>
         <nav>
-          <div className="c-nav">
-            <NavLink to="/templates">Templates</NavLink>
-            <NavLink to="/agents">Agents</NavLink>
-            <NavLink to="/workflows">Workflows</NavLink>
-            <NavLink to="/builder">Builder</NavLink>
-          </div>
+          <AgentContext name="nav">
+            <div className="c-nav">
+              <NavLink to="/templates">Templates</NavLink>
+              <NavLink to="/agents">Agents</NavLink>
+              <NavLink to="/workflows">Workflows</NavLink>
+              <NavLink to="/builder">Builder</NavLink>
+            </div>
+          </AgentContext>
         </nav>
         <main>
           <Outlet />

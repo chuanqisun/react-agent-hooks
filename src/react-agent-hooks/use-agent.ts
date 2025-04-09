@@ -2,8 +2,8 @@ import OpenAI from "openai";
 import { stringify } from "yaml";
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import type { AgentToolItem } from "./agent-hooks";
-import { implicitRootAgentContext } from "./agent-hooks";
+import type { AgentToolItem } from "./agent-context";
+import { implicitRootAgentContext } from "./agent-context";
 
 export function useAgent(options: { apiKey: string }) {
   const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: options.apiKey });

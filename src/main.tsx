@@ -7,6 +7,7 @@ import { AppLayout } from "./pages/_app-layout";
 import { AgentsPage } from "./pages/agents-page/agents-page";
 import { PlaceholderPage } from "./pages/placeholder-page";
 import { TemplatesPage } from "./pages/templates-page";
+import { AgentContext } from "./react-agent-hooks/agent-context";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/agents",
-        element: <AgentsPage />,
+        element: (
+          <AgentContext name="my-agents page">
+            <AgentsPage />
+          </AgentContext>
+        ),
       },
       {
         path: "/agents/:agentId",

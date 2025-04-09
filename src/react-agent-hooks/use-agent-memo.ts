@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { implicitRootAgentContext } from "./agent-hooks";
+import { implicitRootAgentContext } from "./agent-context";
 
 export function useAgentMemo<T>(
   name: string,

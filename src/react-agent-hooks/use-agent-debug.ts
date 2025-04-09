@@ -1,4 +1,4 @@
-import { implicitRootAgentContext } from "./agent-hooks";
+import { implicitRootAgentContext } from "./agent-context";
 
 export function useAgentDebug() {
   const dump = () => {

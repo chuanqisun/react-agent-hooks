@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import { implicitRootAgentContext } from "./agent-hooks";
+import { implicitRootAgentContext } from "./agent-context";
 
 export function useAgentState<S>(name: string, initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
 export function useAgentState<S = undefined>(name: string): [S | undefined, Dispatch<SetStateAction<S | undefined>>];
