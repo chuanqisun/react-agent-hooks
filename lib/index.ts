@@ -1,3 +1,4 @@
+export * from "./agent-context";
 export * from "./use-agent";
 export * from "./use-agent-debug";
 export * from "./use-agent-memo";
