@@ -1,4 +1,4 @@
-# React Agent Hooks Demo
+# React Agent Hooks
 
 Hooks that add Agent usability to your existing React app
 
