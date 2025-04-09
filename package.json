@@ -2,21 +2,22 @@
   "name": "react-agent-hooks",
   "version": "1.0.0-beta.6",
   "type": "module",
-  "types": "lib/index.ts",
+  "main": "dist/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "dist",
     "lib"
   ],
   "license": "MIT",
-  "module": "./dist/react-agent-hooks.js",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/react-agent-hooks.js"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build"
+    "build": "vite build"
   },
   "dependencies": {
     "openai": "^4.92.1",
@@ -38,6 +39,7 @@
     "react-dom": "^19.1.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.3",
     "zod": "^3.24.2"
   }
 }
