@@ -79,6 +79,7 @@ body {
 
 textarea {
   field-sizing: content;
+  resize: vertical;
 }
 
 input,
