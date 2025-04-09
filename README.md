@@ -2,7 +2,7 @@
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)
 
-Hooks that add Agent usability to your existing React app
+Hooks that bring Agents into your React app
 
 - 🪝 Familiar: same semantics as React hooks
 - 🤝 Symbiotic: human interface and agent interface derived from the same state.
