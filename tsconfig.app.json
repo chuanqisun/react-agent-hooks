@@ -23,5 +23,5 @@
     "noUncheckedSideEffectImports": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
+  "include": ["src", "lib"]
 }

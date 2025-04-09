@@ -1,6 +1,5 @@
 import { useRef, useState, type PropsWithChildren } from "react";
-import { useAgentDebug } from "../react-agent-hooks/index.ts";
-import { useAgent } from "../react-agent-hooks/use-agent.ts";
+import { useAgent, useAgentDebug } from "../../lib";
 
 export function AppLayout(props: PropsWithChildren) {
   const [apiKey, setOpenaiApiKey] = useState(localStorage.getItem("react-agent:openai-api-key") ?? "");

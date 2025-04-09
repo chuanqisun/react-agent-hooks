@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useAgentState, useAgentTool } from "../react-agent-hooks";
+import { useAgentState, useAgentTool } from "../../lib";
 
 export function TabSwitchDemo() {
   const [tab, setTab] = useAgentState("activeTab", "tab1");
