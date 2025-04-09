@@ -1,6 +1,6 @@
 # React Agent Hooks
 
-Augment your UI for Agent interaction.
+Agentic State Manager
 
 **Before**
 
