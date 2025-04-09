@@ -59,7 +59,7 @@ npm install react-agent-hooks
 
 ## Usage
 
-### Give Agent the "Eyes"
+### Give Agent "Eyes"
 
 ```tsx
 import { useAgentMemo } from "react-agent-hooks";
@@ -80,7 +80,7 @@ function MyComponent() {
 }
 ```
 
-### Give Agent the "Hands"
+### Give Agent "Hands"
 
 ```tsx
 import {z} from "zod";
