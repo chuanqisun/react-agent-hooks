@@ -143,6 +143,7 @@ function ParentComponent() {
 }
 
 function ChildComponent() {
+  // The state and tool will be available to the Agent only if the child component is rendered
   useAgentState("some state", { name: "Some state" });
   useAgentTool("update state", z.object({ name: z.string() }), (newState) => {
     setSomeState(newState);
