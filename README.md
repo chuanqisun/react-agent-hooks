@@ -153,7 +153,7 @@ function ChildComponent() {
 }
 ```
 
-### Additional Context
+### Scale-up with Context
 
 The `AgentContext` is optionally React Context to help you
 hierarchically organizing states and tools. This can reduce
