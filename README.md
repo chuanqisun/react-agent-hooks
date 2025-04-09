@@ -91,7 +91,7 @@ function MyComponent() {
   // Describe a readable state to the Agent while exposing a setter function to developer
   const [foodPreferences, setFoodPreferences] = useAgentState("food preference", ["Pizza", "Sushi"]);
 
-  // Wrap the setter as a tool and describe it to the the Agent
+  // Wrap the setter as a tool and describe it to the Agent
   const addFoodPreference = useAgentTool("add-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
     setFoodPreferences((prev) => [...prev, ...foodItems]);
   });
