@@ -58,7 +58,7 @@ npm install react-agent-hooks
 
 ## Usage
 
-### Give Agent the "eyes"
+### Give Agent the "Eyes"
 
 ```tsx
 import { useAgentMemo } from "react-agent-hooks";
@@ -67,7 +67,7 @@ function MyComponent() {
   const [name, setName] = useState("John Doe");
   const [age, setAge] = useState(30);
 
-  // Show Agent an existing state
+  // Describe a readable state to the Agent
   useAgentMemo("User's profile", () => ({ name, age }), [name, age]);
 
   return (
@@ -79,7 +79,7 @@ function MyComponent() {
 }
 ```
 
-### Give Agent the "hands"
+### Give Agent the "Hands"
 
 ```tsx
 import {z} from "zod";
@@ -87,10 +87,10 @@ import { useAgentState, useAgentTool } from "react-agent-hooks";
 
 function MyComponent() {
 
-  // fully compatible with react useState. In addition, exposing the state for Agent to read.
+  // Describe a readable state to the Agent while exposing a setter function to developer
   const [foodPreferences, setFoodPreferences] = useAgentState("food preference", ["Pizza", "Sushi"]);
 
-  // returns callback for developer to use in code. In addition, exposing the callback for Agent to use.
+  // Describe a tool to the Agent that wraps the setter function
   const addFoodPreference = useAgentTool("add-food-preference", z.object(foodItems: z.array(z.string())), (foodItems) => {
     setFoodPreferences((prev) => [...prev, ...foodItems]);
   });
@@ -111,7 +111,7 @@ import { useAgent } from "react-agent-hooks";
 
 function MyApp() {
   // Run the Agent with a prompt
-  // This Agent can see all the values from `useAgentState`, `useAgentMemo`, and can use any tool from `useAgentTool`
+  // Agent always sees the latest states from `useAgentState`, `useAgentMemo`, and can uses the latest tools from `useAgentTool`
   const agent = useAgent({ apiKey: "******" });
 
   // Call the Agent
@@ -127,5 +127,27 @@ function MyApp() {
       <button onClick={handleRunAgent}>Ask Agent</button>
     </form>
   );
+}
+```
+
+### Compose Agentic Application
+
+```tsx
+function ParentComponent() {
+  // A higher level component can dynamically decide what lower level states/tools are available
+  const = [shouldShowFeature, setShouldShowFeature] = useAgentState("toggle feature", z.boolean(), true);
+
+  useAgentTool("toggle feature", z.object({}), () => setShouldShowFeature(prev) => !prev);
+
+  return <AppRoot>{shouldShowFeatureB ? <ChildComponent /> : null}</AppRoot>;
+}
+
+function ChildComponent() {
+  useAgentState("some state", { name: "Some state" });
+  useAgentTool("update state", z.object({ name: z.string() }), (newState) => {
+    setSomeState(newState);
+  });
+
+  return <div>...</div>;
 }
 ```
