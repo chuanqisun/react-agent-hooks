@@ -5,7 +5,7 @@
 Hooks that bring Agents into your React app
 
 - 🪝 Familiar: same semantics as React hooks
-- 🤝 Symbiotic: human interface and agent interface derived from the same state.
+- 🤝 Symbiotic: human interface and Agent interface derived from the same state.
 - 🛡️ Safe: developer controls the schema for Agentic state change.
 - ➕ Incremental adoption: use as much or as little as you want.
 - 📦 Composable: fully interoperable with classic React hooks.
