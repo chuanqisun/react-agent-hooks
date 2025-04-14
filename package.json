@@ -20,7 +20,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "openai": "^4.92.1",
+    "openai": "^4.94.0",
     "yaml": "^2.7.1",
     "zod-to-json-schema": "^3.24.5"
   },
