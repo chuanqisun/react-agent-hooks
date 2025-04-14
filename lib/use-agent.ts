@@ -24,7 +24,7 @@ export function useAgent(options: { apiKey: string }) {
   const run = async (prompt: string) => {
     const task = openai.beta.chat.completions
       .runTools({
-        model: "gpt-4o",
+        model: "gpt-4.1",
         messages: [
           {
             role: "system",
@@ -34,7 +34,8 @@ User is interacting with a web app in the following state:
 ${printStates()}
 \`\`\`
 
-Based on user's instruction or goals, you can either answer user's question based on app state, or use one of the provided tools to update the state.
+Based on user's instruction or goals, either answer user's question based on app state, or use one of the provided tools to update the state.
+Short verbal answer/confirmation in the end.
           `.trim(),
           },
           {
