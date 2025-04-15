@@ -24,6 +24,7 @@ export function useAgent(options: { apiKey: string }) {
   const run = async (prompt: string) => {
     const task = openai.beta.chat.completions
       .runTools({
+        stream: true,
         model: "gpt-4.1",
         messages: [
           {
@@ -71,9 +72,7 @@ ${printStates()}
       })
       .on("message", (message) => console.log(message));
 
-    const finalContent = await task.finalContent();
-    console.log("Final content:", finalContent);
-    return finalContent;
+    return task;
   };
 
   const abort = () => {};

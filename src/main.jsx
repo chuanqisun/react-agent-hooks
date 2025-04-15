@@ -54,7 +54,15 @@ function App() {
   const [agentPrompt, setAgentPrompt] = useState("");
   const [lastAgentOutput, setLastAgentOutput] = useState(null);
 
-  const handleSendToAgent = () => agent.run(agentPrompt).then(setLastAgentOutput);
+  const handleSendToAgent = (prompt) =>
+    agent.run(prompt).then(async (stream) => {
+      setLastAgentOutput("");
+      for await (const chunk of stream) {
+        const content = chunk.choices?.[0]?.delta?.content;
+        if (!content) continue;
+        setLastAgentOutput((prev) => prev + content);
+      }
+    });
 
   // print shared space
   useEffect(() => {
@@ -79,7 +87,7 @@ function App() {
           {tasks.map((task) => (
             <li key={task.id}>
               <label>
-                <input type="checkbox" checked={task.isDone} onClick={() => toggleIsDone(task.id)} />
+                <input type="checkbox" checked={task.isDone} onChange={() => toggleIsDone(task.id)} />
                 {task.title}
               </label>
               <button onClick={() => handleHumanEdit(task.id)}>✏️</button>
@@ -108,18 +116,20 @@ function App() {
             onChange={(e) => setAgentPrompt(e.target.value)}
           />
 
-          <button onClick={handleSendToAgent}>▶️ Send to agent</button>
+          <button onClick={() => handleSendToAgent(agentPrompt)}>▶️ Send to agent</button>
 
           <b>Examples</b>
-          <button onClick={(e) => agent.run(e.target.textContent)}>Remind me to pick up kids at 5</button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>I need to buy breakfast items</button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Remind me to pick up kids at 5</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>I need to buy breakfast items</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>
             Add example planning tasks for my upcoming honeymoon
           </button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>Break down the 1st task into smaller ones</button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>Mark all shoppping tasks as done</button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>Mark last two items as done</button>
-          <button onClick={(e) => agent.run(e.target.textContent)}>Delete all the "done" tasks</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>
+            Break down the 1st task into smaller ones
+          </button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Mark all shoppping tasks as done</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Mark last two items as done</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Delete all the "done" tasks</button>
 
           {lastAgentOutput ? <div>🤖 {lastAgentOutput}</div> : null}
         </div>
