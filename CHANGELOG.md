@@ -1,3 +1,7 @@
+# v1.0.0-beta.18
+
+- Added: require `dependencies` for memo to prevent infinite loops
+
 # v1.0.0-beta.17
 
 - Added: abortable agent runs

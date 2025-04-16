@@ -74,7 +74,7 @@ function MyComponent() {
   const [age, setAge] = useState(30);
 
   // Describe a readable state to the Agent
-  useAgentMemo("User's profile", () => ({ name, age }), { dependencies: [name, age] });
+  useAgentMemo("User's profile", () => ({ name, age }), [name, age]);
 
   return (
     <div>
@@ -142,7 +142,7 @@ Inside a component, use the `enabled` option to dynamically show/hide states and
 
 ```tsx
 const shouldShowFeature = true; // You can dynamically decide this value
-useAgentMemo("User's profile", () => ({ name, age }), { dependencies: [name, age], enabled: shouldShowFeature });
+useAgentMemo("User's profile", () => ({ name, age }), [name, age], { enabled: shouldShowFeature });
 useAgentState("some state", { name: "Some state" }, { enabled: shouldShowFeature });
 useAgentTool(
   "update state",
