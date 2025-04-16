@@ -50,7 +50,7 @@ export function MyComponent() {
     <div>
       <h1>{name}</h1>
       <p>{age}</p>
-      <button onClick={() => agent.submit("increase the age")}>Increase Age</button>
+      <button onClick={() => agent.run("increase the age")}>Increase Age</button>
     </div>
   );
 }

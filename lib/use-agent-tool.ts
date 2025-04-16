@@ -6,17 +6,23 @@ export function useAgentTool<T, K>(
   name: string,
   params: ZodSchema<T>,
   run: (params: T) => K | Promise<K>,
-  options?: { description?: string; dependencies?: unknown[] },
+  options?: {
+    description?: string;
+    dependencies?: unknown[];
+    enabled?: boolean;
+  },
 ) {
   const context = useContext(AgentContextInternal);
 
   useEffect(() => {
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+
     // if params is zod.Object, use as is, otherwise wrap in as { input: params }
     const openaiCompatRunner =
       params instanceof ZodObject
         ? {
-            params,
-            run,
+            params: params,
+            run: run,
           }
         : {
             params: z.object({ input: params }),
@@ -29,8 +35,9 @@ export function useAgentTool<T, K>(
       callback: openaiCompatRunner.run,
       context,
     });
+
     return () => void implicitRootAgentContext.delete(name);
-  }, [name, params, run, ...(options?.dependencies ?? [])]);
+  }, [name, params, run, ...(options?.dependencies ?? []), options?.enabled]);
 
   return run;
 }

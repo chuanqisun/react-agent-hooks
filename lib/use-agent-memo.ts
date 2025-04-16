@@ -5,17 +5,19 @@ export function useAgentMemo<T>(
   name: string,
   factory: () => T,
   dependencies: unknown[],
-  _options?: { description?: string },
+  options?: { description?: string; enabled?: boolean },
 ): T {
   const [latestValue, setLatestValue] = useState<T>(factory());
   const context = useContext(AgentContextInternal);
 
   useEffect(() => {
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+
     const newValue = factory();
     implicitRootAgentContext.set(name, { type: "state", data: newValue, context });
     setLatestValue(newValue);
     return () => void implicitRootAgentContext.delete(name);
-  }, dependencies);
+  }, [name, ...dependencies, options?.description, options?.enabled]);
 
   return latestValue;
 }
