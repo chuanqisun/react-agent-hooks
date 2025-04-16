@@ -2,7 +2,7 @@
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)
 
-Hooks that bring Agents into your React app
+Turn React Hooks into LLM Tools
 
 - 🪝 Familiar: same semantics as React hooks
 - 🤝 Symbiotic: human interface and Agent interface derived from the same state.
