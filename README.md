@@ -74,7 +74,7 @@ function MyComponent() {
   const [age, setAge] = useState(30);
 
   // Describe a readable state to the Agent
-  useAgentMemo("User's profile", () => ({ name, age }), [name, age]);
+  useAgentMemo("User's profile", () => ({ name, age }), { dependencies: [name, age] });
 
   return (
     <div>
@@ -124,7 +124,7 @@ function MyApp() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const input = e.target.elements[0].value;
-    agent.submit(input);
+    agent.run(input);
   };
 
   return (
@@ -137,6 +137,24 @@ function MyApp() {
 ```
 
 ### Compose Agentic Application
+
+Inside a component, use the `enabled` option to dynamically show/hide states and tools to the Agent.
+
+```tsx
+const shouldShowFeature = true; // You can dynamically decide this value
+useAgentMemo("User's profile", () => ({ name, age }), { dependencies: [name, age], enabled: shouldShowFeature });
+useAgentState("some state", { name: "Some state" }, { enabled: shouldShowFeature });
+useAgentTool(
+  "update state",
+  z.object({ name: z.string() }),
+  (newState) => {
+    setSomeState(newState);
+  },
+  { enabled: shouldShowFeature },
+);
+```
+
+In a component tree, use JSX to dynamically show/hide states and tools to the Agent.
 
 ```tsx
 function ParentComponent() {
@@ -160,6 +178,8 @@ function ChildComponent() {
 ```
 
 ### Scale-up with Context
+
+(This feature is work-in-progress)
 
 The `AgentContext` is optionally React Context to help you
 hierarchically organizing states and tools. This can reduce
