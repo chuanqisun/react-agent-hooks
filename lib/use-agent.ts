@@ -7,7 +7,12 @@ export function useAgent(options: { apiKey: string }) {
   const agentContext = useAgentContext();
   const activeControllers = useRef<AbortController[]>([]);
 
-  const run = async (prompt: string) => {
+  const run = async (
+    prompt: string,
+    options?: {
+      signal?: AbortSignal;
+    },
+  ) => {
     const abortController = new AbortController();
     activeControllers.current.push(abortController);
 
@@ -36,7 +41,7 @@ Short verbal answer/confirmation in the end.
         tools: agentContext.getTools(),
       },
       {
-        signal: abortController.signal,
+        signal: options?.signal,
       },
     );
 
@@ -47,15 +52,7 @@ Short verbal answer/confirmation in the end.
     return task;
   };
 
-  const abort = () => {
-    activeControllers.current.forEach((controller) => {
-      controller.abort();
-    });
-    activeControllers.current = [];
-  };
-
   return {
     run,
-    abort,
   };
 }

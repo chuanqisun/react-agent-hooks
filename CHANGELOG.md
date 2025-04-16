@@ -1,3 +1,7 @@
+# v1.0.0-beta.17
+
+- Added: abortable agent runs
+
 # v1.0.0-beta.16
 
 - Added: `dependencies` field in memo and tool hooks options
