@@ -1,4 +1,4 @@
-# v1.0.0-beta.15
+# v1.0.0-beta.16
 
 - Added: `dependencies` field in memo and tool hooks options
 - Added: `description` field in tool hook option
