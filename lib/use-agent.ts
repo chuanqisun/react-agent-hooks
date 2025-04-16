@@ -1,13 +1,18 @@
 import OpenAI from "openai";
+import { useRef } from "react";
 import { useAgentContext } from "./use-agent-context";
 
 export function useAgent(options: { apiKey: string }) {
   const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: options.apiKey });
   const agentContext = useAgentContext();
+  const activeControllers = useRef<AbortController[]>([]);
 
   const run = async (prompt: string) => {
-    const task = openai.beta.chat.completions
-      .runTools({
+    const abortController = new AbortController();
+    activeControllers.current.push(abortController);
+
+    const task = openai.beta.chat.completions.runTools(
+      {
         stream: true,
         model: "gpt-4.1",
         messages: [
@@ -29,13 +34,25 @@ Short verbal answer/confirmation in the end.
           },
         ],
         tools: agentContext.getTools(),
-      })
-      .on("message", (message) => console.log(message));
+      },
+      {
+        signal: abortController.signal,
+      },
+    );
+
+    task.finalContent().finally(() => {
+      activeControllers.current = activeControllers.current.filter((controller) => controller !== abortController);
+    });
 
     return task;
   };
 
-  const abort = () => {};
+  const abort = () => {
+    activeControllers.current.forEach((controller) => {
+      controller.abort();
+    });
+    activeControllers.current = [];
+  };
 
   return {
     run,
