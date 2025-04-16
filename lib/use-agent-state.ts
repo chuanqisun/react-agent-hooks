@@ -4,11 +4,15 @@ import { AgentContextInternal, implicitRootAgentContext } from "./agent-context"
 
 export function useAgentState<S>(
   name: string,
-  options?: { initialState: S | (() => S); enabled?: boolean },
+  initialState?: S | (() => S),
+  options?: {
+    /** Explicitly show/hide the state from the agent */
+    enabled?: boolean;
+  },
 ): [S, Dispatch<SetStateAction<S>>];
 export function useAgentState<S = undefined>(name: string): [S | undefined, Dispatch<SetStateAction<S | undefined>>];
-export function useAgentState(name: string, options?: { initialState?: any; enabled?: boolean }) {
-  const [state, setState] = useState(options?.initialState);
+export function useAgentState(name: string, initialState?: any, options?: { enabled?: boolean }) {
+  const [state, setState] = useState(initialState);
   const context = useContext(AgentContextInternal);
 
   useEffect(() => {

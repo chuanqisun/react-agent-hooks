@@ -11,6 +11,7 @@ export interface AgentToolItem {
   type: "tool";
   params: ZodSchema<any>;
   callback: (args: any) => any;
+  description?: string;
   context?: ExplicitAgentContext;
 }
 

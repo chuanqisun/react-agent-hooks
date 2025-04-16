@@ -9,7 +9,7 @@ let taskId = 0;
 function App() {
   const [apiKey, setApiKey] = useState(localStorage.getItem("react-agent-hooks:openai-api-key") ?? "");
 
-  const [tasks, setTasks] = useAgentState("My tasks", { initialState: [] });
+  const [tasks, setTasks] = useAgentState("My tasks", []);
 
   const addTask = useAgentTool("add_task", z.string().describe("The title of the task"), (title) =>
     setTasks((prevTasks) => [...prevTasks, { id: ++taskId, title, isDone: false }]),

@@ -39,6 +39,7 @@ export function useAgentContext() {
         type: "function" as const,
         function: {
           name,
+          description: (item as AgentToolItem).description,
           parse: zodParseJSON((item as AgentToolItem).params),
           function: async (args: any) => {
             try {

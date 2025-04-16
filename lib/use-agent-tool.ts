@@ -8,36 +8,42 @@ export function useAgentTool<T, K>(
   run: (params: T) => K | Promise<K>,
   options?: {
     description?: string;
+    /** When dependencies are not provided, the effect will run on every render. */
     dependencies?: unknown[];
+    /** Explicitly show/hide the state from the agent */
     enabled?: boolean;
   },
 ) {
   const context = useContext(AgentContextInternal);
 
-  useEffect(() => {
-    if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+  useEffect(
+    () => {
+      if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
 
-    // if params is zod.Object, use as is, otherwise wrap in as { input: params }
-    const openaiCompatRunner =
-      params instanceof ZodObject
-        ? {
-            params: params,
-            run: run,
-          }
-        : {
-            params: z.object({ input: params }),
-            run: (args: any) => run(args.input),
-          };
+      // if params is zod.Object, use as is, otherwise wrap in as { input: params }
+      const openaiCompatRunner =
+        params instanceof ZodObject
+          ? {
+              params: params,
+              run: run,
+            }
+          : {
+              params: z.object({ input: params }),
+              run: (args: any) => run(args.input),
+            };
 
-    implicitRootAgentContext.set(name, {
-      type: "tool",
-      params: openaiCompatRunner.params,
-      callback: openaiCompatRunner.run,
-      context,
-    });
+      implicitRootAgentContext.set(name, {
+        type: "tool",
+        params: openaiCompatRunner.params,
+        callback: openaiCompatRunner.run,
+        description: options?.description,
+        context,
+      });
 
-    return () => void implicitRootAgentContext.delete(name);
-  }, [name, params, run, ...(options?.dependencies ?? []), options?.enabled]);
+      return () => void implicitRootAgentContext.delete(name);
+    },
+    options?.dependencies ? [name, params, run, ...(options.dependencies ?? []), options?.enabled] : undefined,
+  );
 
   return run;
 }
