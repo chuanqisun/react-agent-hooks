@@ -177,6 +177,49 @@ function ChildComponent() {
 }
 ```
 
+### Build a custom Agent
+
+Access currently active states and tools with `useAgentContext` hook. Here is an example of building your own agent
+
+```tsx
+export function useMyAgent() {
+  const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: "******" });
+  const agentContext = useAgentContext();
+
+  const run = async (prompt: string) => {
+    const task = openai.beta.chat.completions.runTools({
+      stream: true,
+      model: "gpt-4.1",
+      messages: [
+        {
+          role: "system",
+          content: `
+User is interacting with a web app in the following state:
+\`\`\`yaml
+${agentContext.stringifyStates()}
+\`\`\`
+
+Based on user's instruction or goals, either answer user's question based on app state, or use one of the provided tools to update the state.
+Short verbal answer/confirmation in the end.
+          `.trim(),
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      tools: agentContext.getTools(),
+    });
+
+    return task;
+  };
+
+  return {
+    run,
+  };
+}
+```
+
 ### Scale-up with Context
 
 (This feature is work-in-progress)
