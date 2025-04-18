@@ -1,4 +1,4 @@
-# v1.0.0-beta.21
+# v1.0.0-beta.22
 
 - Added: tool name auto-aliasing so you can use the same tool name with different implementations
 
