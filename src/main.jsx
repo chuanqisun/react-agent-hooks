@@ -50,7 +50,7 @@ function App() {
   };
 
   const agent = useAgent({ apiKey });
-  const { dump } = useAgentDebug();
+  const { debugText } = useAgentDebug();
   const [agentPrompt, setAgentPrompt] = useState("");
   const [lastAgentOutput, setLastAgentOutput] = useState(null);
 
@@ -66,17 +66,10 @@ function App() {
 
   // print shared space
   useEffect(() => {
-    const clearId = setInterval(
-      ((document.querySelector("#agent-state").textContent = JSON.stringify(
-        Object.fromEntries(Object.entries(dump()).map(([k, v]) => [k, { type: v.type, data: v.data }])),
-        null,
-        2,
-      )),
-      100),
-    );
+    const clearId = setInterval(((document.querySelector("#agent-state").textContent = debugText()), 100));
 
     return () => clearInterval(clearId);
-  }, [dump]);
+  }, [debugText]);
 
   return (
     <div className="app-layout">

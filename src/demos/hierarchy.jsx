@@ -32,13 +32,20 @@ function App() {
     <div className="app-layout">
       <div className="human-space">
         <ul>
-          <Item name="feature 1" />
-          <Item name="feature 2" />
-          <Item name="feature 3" />
+          <AgentContext name="feature 1">
+            <Item name="feature 1" />
+          </AgentContext>
+          <AgentContext name="feature 2">
+            <Item name="feature 2" />
+          </AgentContext>
+          <AgentContext name="feature 3">
+            <Item name="feature 3" />
+          </AgentContext>
         </ul>
       </div>
       <div className="agent-space">
         <h2>Control</h2>
+        <mark>This is a work in progress</mark>
         <div className="rows">
           <label>Open AI API Key</label>
           <input
@@ -72,19 +79,19 @@ function App() {
 
 function Item(props) {
   const [items, setItems] = useAgentState("items", ["Item 1", "Item 2", "Item 3"]);
-  useAgentTool("update-items", z.object({ items: z.array(z.string()) }), (data) => setItems(data.items));
+  useAgentTool(`update-items-for-${props.name}`, z.object({ items: z.array(z.string()) }), (data) =>
+    setItems(data.items),
+  );
 
   return (
-    <AgentContext name={props.name}>
-      <li>
-        {props.name}
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </li>
-    </AgentContext>
+    <li>
+      {props.name}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </li>
   );
 }
 
