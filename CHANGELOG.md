@@ -1,3 +1,8 @@
+# unreleased
+
+- Added: `AgentContext` to allow hierarchical organization of agents
+- Fixed: Some characters in tool name will cause error
+
 # v1.0.0-beta.19
 
 - Added: `description` field for state hook

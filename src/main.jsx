@@ -11,23 +11,23 @@ function App() {
 
   const [tasks, setTasks] = useAgentState("My tasks", []);
 
-  const addTask = useAgentTool("add_task", z.string().describe("The title of the task"), (title) =>
+  const addTask = useAgentTool("Add task", z.string().describe("The title of the task"), (title) =>
     setTasks((prevTasks) => [...prevTasks, { id: ++taskId, title, isDone: false }]),
   );
 
-  const deleteTask = useAgentTool("delete_task", z.number().describe("ID of the task to be deleted"), (id) =>
+  const deleteTask = useAgentTool("Delete task", z.number().describe("ID of the task to be deleted"), (id) =>
     setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id)),
   );
 
   const toggleIsDone = useAgentTool(
-    "toggle_is_done",
+    "Toggle is task done",
     z.number().describe("ID of the task to toggle between done/todo"),
     (id) =>
       setTasks((prevTasks) => prevTasks.map((task) => (task.id === id ? { ...task, isDone: !task.isDone } : task))),
   );
 
   const editTaskTitle = useAgentTool(
-    "edit_task_title",
+    "Edit task title",
     z.object({
       id: z.number().describe("ID of the task whose title to be edited"),
       title: z.string().describe("The updated title"),

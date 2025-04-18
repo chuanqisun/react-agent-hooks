@@ -1,6 +1,7 @@
 import { stringify } from "yaml";
 import zodToJsonSchema from "zod-to-json-schema";
-import { implicitRootAgentContext, type AgentToolItem } from "./agent-context";
+import { implicitRootAgentContext, type AgentItem, type AgentToolItem } from "./agent-context";
+import { getToolName } from "./get-tool-name";
 import { zodParseJSON } from "./zod-parse-json";
 
 /**
@@ -9,30 +10,46 @@ import { zodParseJSON } from "./zod-parse-json";
  */
 export function useAgentContext() {
   const getStates = () => {
-    const printItems: any[] = [];
-    implicitRootAgentContext.forEach((value, key) => {
-      switch (value.type) {
-        case "state":
-          const description = value.description?.trim();
-          printItems.push([`${key}${description ? ` (${description})` : ""}`, value.data]);
-          break;
-      }
+    // sort by the prefix so the tools for the same UI area will be grouped together
+    const groupedByPrefix = Object.entries(
+      Object.groupBy(implicitRootAgentContext.values(), (item) => item.prefix) as Record<string, AgentItem[]>,
+    );
+
+    const view = groupedByPrefix.map(([prefix, items]) => {
+      return [
+        ["root", prefix].filter(Boolean).join("::"),
+        Object.fromEntries(
+          items.map((value) => {
+            switch (value.type) {
+              case "state": {
+                return [`【state】${value.name}${value.description ? ` (${value.description})` : ""}`, value.data];
+              }
+              case "tool": {
+                return [
+                  `【tool】${value.name}${value.description ? ` (${value.description})` : ""}`,
+                  getToolName(value.name),
+                ];
+              }
+            }
+          }),
+        ),
+      ];
     });
 
-    return Object.fromEntries(printItems);
+    return Object.fromEntries(view);
   };
 
   const stringifyStates = () => {
-    return stringify(getStates());
+    return stringify(getStates()).trim();
   };
 
   const getTools = () =>
     [...implicitRootAgentContext.entries()]
       .filter(([_k, value]) => value.type === "tool")
-      .map(([name, item]) => ({
+      .map(([_key, item]) => ({
         type: "function" as const,
         function: {
-          name,
+          name: getToolName(item.name),
           description: (item as AgentToolItem).description,
           parse: zodParseJSON((item as AgentToolItem).params),
           function: async (args: any) => {
