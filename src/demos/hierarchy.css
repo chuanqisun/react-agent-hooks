@@ -1,0 +1,65 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  padding: 8px;
+}
+
+.app-layout {
+  display: grid;
+  height: 100%;
+  grid-template:
+    "human agent" 1fr
+    "shared shared" 1fr / 1fr 1fr;
+
+  gap: 8px;
+
+  > * {
+    overflow: auto;
+    min-height: 0;
+  }
+}
+
+.human-space,
+.agent-space,
+.shared-space {
+  padding: 8px;
+  border: 1px solid #999;
+}
+
+h2 {
+  margin-block: 0;
+}
+
+.human-space {
+  grid-area: human;
+}
+
+.agent-space {
+  grid-area: agent;
+}
+
+.shared-space {
+  grid-area: shared;
+}
+
+.rows {
+  display: grid;
+  gap: 4px;
+}

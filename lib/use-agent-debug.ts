@@ -1,11 +1,15 @@
-import { implicitRootAgentContext } from "./agent-context";
+import { useAgentContext } from "./use-agent-context";
 
 export function useAgentDebug() {
-  const dump = () => {
-    return Object.fromEntries(implicitRootAgentContext.entries());
+  const context = useAgentContext();
+  const debugObject = context.getStates();
+
+  const debugText = () => {
+    return context.stringifyStates();
   };
 
   return {
-    dump,
+    debugText,
+    debugObject,
   };
 }
