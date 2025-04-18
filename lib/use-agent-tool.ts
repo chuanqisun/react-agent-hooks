@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { z, ZodObject, type ZodSchema } from "zod";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
+import { getPathKey } from "./get-path-key";
 
 export function useAgentTool<T, K>(
   name: string,
@@ -16,35 +17,35 @@ export function useAgentTool<T, K>(
   },
 ) {
   const context = useContext(AgentContextInternal);
+  const { prefix, path } = getPathKey(context.breadcrumbs, name);
 
-  useEffect(
-    () => {
-      if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+  useEffect(() => {
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(path);
 
-      // if params is zod.Object, use as is, otherwise wrap in as { input: params }
-      const openaiCompatRunner =
-        params instanceof ZodObject
-          ? {
-              params: params,
-              run: run,
-            }
-          : {
-              params: z.object({ input: params }),
-              run: (args: any) => run(args.input),
-            };
+    // if params is zod.Object, use as is, otherwise wrap in as { input: params }
+    const openaiCompatRunner =
+      params instanceof ZodObject
+        ? {
+            params: params,
+            run: run,
+          }
+        : {
+            params: z.object({ input: params }),
+            run: (args: any) => run(args.input),
+          };
 
-      implicitRootAgentContext.set(name, {
-        type: "tool",
-        params: openaiCompatRunner.params,
-        callback: openaiCompatRunner.run,
-        description: options?.description,
-        context,
-      });
+    implicitRootAgentContext.set(path, {
+      name,
+      prefix,
+      type: "tool",
+      params: openaiCompatRunner.params,
+      callback: openaiCompatRunner.run,
+      description: options?.description,
+      context,
+    });
 
-      return () => void implicitRootAgentContext.delete(name);
-    },
-    options?.dependencies ? [name, params, run, ...(options.dependencies ?? []), options?.enabled] : undefined,
-  );
+    return () => void implicitRootAgentContext.delete(path);
+  }, [path, prefix, name, params, run, options?.enabled, ...(options?.dependencies ?? [])]);
 
   return run;
 }

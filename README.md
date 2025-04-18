@@ -222,11 +222,8 @@ Short verbal answer/confirmation in the end.
 
 ### Scale-up with Context
 
-(This feature is work-in-progress)
-
-The `AgentContext` is optionally React Context to help you
-hierarchically organizing states and tools. This can reduce
-error when working with large number of states and tools.
+The `AgentContext` is optionally React Context to help you hierarchically organizing states and tools.
+This prevents naming collisions and reduces agent confusion from too many similar states and tools.
 
 ```tsx
 import { AgentContext } from "react-agent-hooks";

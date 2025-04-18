@@ -26,7 +26,8 @@ export function useAgent(options: { apiKey: string }) {
           {
             role: "system",
             content: `
-User is interacting with a web app in the following state:
+User is interacting with a web app with the following states and tools:
+
 \`\`\`yaml
 ${agentContext.stringifyStates()}
 \`\`\`

@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useContext, useEffect, useState } from "react";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
+import { getPathKey } from "./get-path-key";
 
 export function useAgentState<S>(
   name: string,
@@ -15,13 +16,22 @@ export function useAgentState<S = undefined>(name: string): [S | undefined, Disp
 export function useAgentState(name: string, initialState?: any, options?: { enabled?: boolean; description?: string }) {
   const [state, setState] = useState(initialState);
   const context = useContext(AgentContextInternal);
+  const { prefix, path } = getPathKey(context.breadcrumbs, name);
 
   useEffect(() => {
-    if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(path);
 
-    implicitRootAgentContext.set(name, { type: "state", data: state, context, description: options?.description });
-    return () => void implicitRootAgentContext.delete(name);
-  }, [name, state, options?.enabled, options?.description]);
+    implicitRootAgentContext.set(path, {
+      name,
+      prefix,
+      type: "state",
+      data: state,
+      context,
+      description: options?.description,
+    });
+
+    return () => void implicitRootAgentContext.delete(path);
+  }, [path, prefix, name, state, options?.enabled, options?.description]);
 
   return [state, setState];
 }

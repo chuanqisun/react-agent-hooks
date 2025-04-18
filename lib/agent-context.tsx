@@ -4,12 +4,16 @@ import type { ZodSchema } from "zod";
 export type AgentItem = AgentStateItem | AgentToolItem;
 export interface AgentStateItem {
   type: "state";
+  prefix: string;
+  name: string;
   data: any;
   description?: string;
   context?: ExplicitAgentContext;
 }
 export interface AgentToolItem {
   type: "tool";
+  prefix: string;
+  name: string;
   params: ZodSchema<any>;
   callback: (args: any) => any;
   description?: string;
@@ -30,6 +34,8 @@ export type AgentContextProps = PropsWithChildren & {
   name: string;
 };
 export const AgentContext: React.FC<AgentContextProps> = ({ name, children }) => {
+  if (!name.trim()) throw new Error("AgentContext name cannot be empty");
+
   const parentContext = useContext(AgentContextInternal);
   return (
     <AgentContextInternal
