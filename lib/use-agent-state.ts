@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useId, useState } from "react";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
-import { getPathKey } from "./get-path-key";
+import { getPathPrefix } from "./get-path-prefix";
 
 export function useAgentState<S>(
   name: string,
@@ -16,12 +16,13 @@ export function useAgentState<S = undefined>(name: string): [S | undefined, Disp
 export function useAgentState(name: string, initialState?: any, options?: { enabled?: boolean; description?: string }) {
   const [state, setState] = useState(initialState);
   const context = useContext(AgentContextInternal);
-  const { prefix, path } = getPathKey(context.breadcrumbs, name);
+  const prefix = getPathPrefix(context.breadcrumbs);
+  const id = useId();
 
   useEffect(() => {
-    if (options?.enabled === false) return void implicitRootAgentContext.delete(path);
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(id);
 
-    implicitRootAgentContext.set(path, {
+    implicitRootAgentContext.set(id, {
       name,
       prefix,
       type: "state",
@@ -30,8 +31,8 @@ export function useAgentState(name: string, initialState?: any, options?: { enab
       description: options?.description,
     });
 
-    return () => void implicitRootAgentContext.delete(path);
-  }, [path, prefix, name, state, options?.enabled, options?.description]);
+    return () => void implicitRootAgentContext.delete(id);
+  }, [id, prefix, name, state, options?.enabled, options?.description]);
 
   return [state, setState];
 }

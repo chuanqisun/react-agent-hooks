@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useId } from "react";
 import { z, ZodObject, type ZodSchema } from "zod";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
-import { getPathKey } from "./get-path-key";
+import { getPathPrefix } from "./get-path-prefix";
 
 export function useAgentTool<T, K>(
   name: string,
@@ -17,10 +17,11 @@ export function useAgentTool<T, K>(
   },
 ) {
   const context = useContext(AgentContextInternal);
-  const { prefix, path } = getPathKey(context.breadcrumbs, name);
+  const prefix = getPathPrefix(context.breadcrumbs);
+  const id = useId();
 
   useEffect(() => {
-    if (options?.enabled === false) return void implicitRootAgentContext.delete(path);
+    if (options?.enabled === false) return void implicitRootAgentContext.delete(id);
 
     // if params is zod.Object, use as is, otherwise wrap in as { input: params }
     const openaiCompatRunner =
@@ -34,7 +35,7 @@ export function useAgentTool<T, K>(
             run: (args: any) => run(args.input),
           };
 
-    implicitRootAgentContext.set(path, {
+    implicitRootAgentContext.set(id, {
       name,
       prefix,
       type: "tool",
@@ -44,8 +45,8 @@ export function useAgentTool<T, K>(
       context,
     });
 
-    return () => void implicitRootAgentContext.delete(path);
-  }, [path, prefix, name, params, run, options?.enabled, ...(options?.dependencies ?? [])]);
+    return () => void implicitRootAgentContext.delete(id);
+  }, [id, prefix, name, params, run, options?.enabled, ...(options?.dependencies ?? [])]);
 
   return run;
 }

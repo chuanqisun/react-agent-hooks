@@ -66,6 +66,13 @@ function App() {
 
           <button onClick={() => handleSendToAgent(agentPrompt)}>▶️ Send to agent</button>
 
+          <b>Examples</b>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Reverse feature 1</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Append two more items to feature 2</button>
+          <button onClick={(e) => handleSendToAgent(e.target.textContent)}>
+            Swap the content of feature 2 and feature 3
+          </button>
+
           {lastAgentOutput ? <div>🤖 {lastAgentOutput}</div> : null}
         </div>
       </div>
@@ -79,9 +86,7 @@ function App() {
 
 function Item(props) {
   const [items, setItems] = useAgentState("items", ["Item 1", "Item 2", "Item 3"]);
-  useAgentTool(`update-items-for-${props.name}`, z.object({ items: z.array(z.string()) }), (data) =>
-    setItems(data.items),
-  );
+  useAgentTool(`update-items`, z.object({ items: z.array(z.string()) }), (data) => setItems(data.items));
 
   return (
     <li>
