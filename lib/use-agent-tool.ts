@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { z, ZodObject, type ZodSchema } from "zod";
 import { AgentContextInternal, implicitRootAgentContext } from "./agent-context";
 
@@ -17,9 +17,11 @@ export function useAgentTool<T, K>(
 ) {
   const context = useContext(AgentContextInternal);
 
+  const normalizedName = useMemo(() => normalizeToolName(name), [name]);
+
   useEffect(
     () => {
-      if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
+      if (options?.enabled === false) return void implicitRootAgentContext.delete(normalizedName);
 
       // if params is zod.Object, use as is, otherwise wrap in as { input: params }
       const openaiCompatRunner =
@@ -33,7 +35,7 @@ export function useAgentTool<T, K>(
               run: (args: any) => run(args.input),
             };
 
-      implicitRootAgentContext.set(name, {
+      implicitRootAgentContext.set(normalizedName, {
         type: "tool",
         params: openaiCompatRunner.params,
         callback: openaiCompatRunner.run,
@@ -41,10 +43,17 @@ export function useAgentTool<T, K>(
         context,
       });
 
-      return () => void implicitRootAgentContext.delete(name);
+      return () => void implicitRootAgentContext.delete(normalizedName);
     },
-    options?.dependencies ? [name, params, run, ...(options.dependencies ?? []), options?.enabled] : undefined,
+    options?.dependencies
+      ? [normalizedName, params, run, ...(options.dependencies ?? []), options?.enabled]
+      : undefined,
   );
 
   return run;
+}
+
+/** OpenAI require this format: ^[a-zA-Z0-9_-]+$ */
+function normalizeToolName(name: string) {
+  return name.replace(/[^a-zA-Z0-9_-]/g, "_");
 }
