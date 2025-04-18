@@ -1,20 +1,13 @@
-import { useContext } from "react";
 import { stringify } from "yaml";
 import zodToJsonSchema from "zod-to-json-schema";
-import { AgentContextInternal, implicitRootAgentContext, type AgentToolItem } from "./agent-context";
+import { implicitRootAgentContext, type AgentToolItem } from "./agent-context";
 import { zodParseJSON } from "./zod-parse-json";
 
 /**
- * Use this context to build your own agent
- *
+ * Use this hook to build your own agent
  * It returns an array of tools that are compatible with OpenAI's tool use API
  */
 export function useAgentContext() {
-  const context = useContext(AgentContextInternal);
-  if (!context) {
-    throw new Error("useAgentContext must be used within an AgentContext");
-  }
-
   const getStates = () => {
     const printItems: any[] = [];
     implicitRootAgentContext.forEach((value, key) => {
