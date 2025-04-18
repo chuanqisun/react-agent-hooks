@@ -1,3 +1,7 @@
+# v1.0.0-beta.21
+
+- Added: tool name auto-aliasing so you can use the same tool name with different implementations
+
 # v1.0.0-beta.20
 
 - Added: Partial support `AgentContext` to allow hierarchical organization of agents
