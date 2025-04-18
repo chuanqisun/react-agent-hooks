@@ -20,7 +20,8 @@ export function useAgentContext() {
     implicitRootAgentContext.forEach((value, key) => {
       switch (value.type) {
         case "state":
-          printItems.push([key, value.data]);
+          const description = value.description?.trim();
+          printItems.push([`${key}${description ? ` (${description})` : ""}`, value.data]);
           break;
       }
     });

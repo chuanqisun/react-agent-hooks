@@ -1,3 +1,8 @@
+# v1.0.0-beta.19
+
+- Added: `description` field for state hook
+- Added: model override
+
 # v1.0.0-beta.18
 
 - Added: require `dependencies` for memo to prevent infinite loops

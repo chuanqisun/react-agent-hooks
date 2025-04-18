@@ -7,6 +7,7 @@ export function useAgentTool<T, K>(
   params: ZodSchema<T>,
   run: (params: T) => K | Promise<K>,
   options?: {
+    /** Describe additional guidance about this tool that is not described in the parameter schema itself  */
     description?: string;
     /** When dependencies are not provided, the effect will run on every render. */
     dependencies?: unknown[];

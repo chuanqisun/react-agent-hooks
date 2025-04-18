@@ -5,6 +5,7 @@ export type AgentItem = AgentStateItem | AgentToolItem;
 export interface AgentStateItem {
   type: "state";
   data: any;
+  description?: string;
   context?: ExplicitAgentContext;
 }
 export interface AgentToolItem {

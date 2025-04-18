@@ -7,6 +7,7 @@ export function useAgentMemo<T>(
   dependencies: unknown[],
   options?: {
     /** Explicitly show/hide the state from the agent */
+    description?: string;
     enabled?: boolean;
   },
 ): T {
@@ -17,10 +18,10 @@ export function useAgentMemo<T>(
     if (options?.enabled === false) return void implicitRootAgentContext.delete(name);
 
     const newValue = factory();
-    implicitRootAgentContext.set(name, { type: "state", data: newValue, context });
+    implicitRootAgentContext.set(name, { type: "state", data: newValue, context, description: options?.description });
     setLatestValue(newValue);
     return () => void implicitRootAgentContext.delete(name);
-  }, [name, ...dependencies, options?.enabled]);
+  }, [name, ...dependencies, options?.enabled, options?.description]);
 
   return latestValue;
 }

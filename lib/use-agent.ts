@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import type { ChatModel } from "openai/resources.mjs";
 import { useRef } from "react";
 import { useAgentContext } from "./use-agent-context";
 
@@ -10,6 +11,7 @@ export function useAgent(options: { apiKey: string }) {
   const run = async (
     prompt: string,
     options?: {
+      model?: ChatModel;
       signal?: AbortSignal;
     },
   ) => {
@@ -19,7 +21,7 @@ export function useAgent(options: { apiKey: string }) {
     const task = openai.beta.chat.completions.runTools(
       {
         stream: true,
-        model: "gpt-4.1",
+        model: options?.model ?? "gpt-4.1",
         messages: [
           {
             role: "system",
