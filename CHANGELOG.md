@@ -1,3 +1,7 @@
+# v1.0.0-beta.24
+
+- Changed: improve tool rendering to agent
+
 # v1.0.0-beta.23
 
 - Added: `useAgentContext` for building custom agents
@@ -8,9 +12,9 @@
 
 # v1.0.0-beta.20
 
-- Added: Partial support `AgentContext` to allow hierarchical organization of agents
-- Changed: Improved state and tool description for agent
-- Fixed: Some characters in tool name will cause error
+- Added: partial support `AgentContext` to allow hierarchical organization of agents
+- Changed: improved state and tool description for agent
+- Fixed: some characters in tool name will cause error
 
 # v1.0.0-beta.19
 
