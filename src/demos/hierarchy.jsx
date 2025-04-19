@@ -45,7 +45,6 @@ function App() {
       </div>
       <div className="agent-space">
         <h2>Control</h2>
-        <mark>This is a work in progress</mark>
         <div className="rows">
           <label>Open AI API Key</label>
           <input
@@ -86,7 +85,9 @@ function App() {
 
 function Item(props) {
   const [items, setItems] = useAgentState("items", ["Item 1", "Item 2", "Item 3"]);
-  useAgentTool(`update-items`, z.object({ items: z.array(z.string()) }), (data) => setItems(data.items));
+  useAgentTool(`update-items`, z.object({ items: z.array(z.string()) }), (data) => setItems(data.items), {
+    description: "Update the items inside",
+  });
 
   return (
     <li>

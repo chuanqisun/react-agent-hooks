@@ -20,10 +20,15 @@ export function useAgentContext() {
                 return [`【state】${value.name}${value.description ? ` (${value.description})` : ""}`, value.data];
               }
               case "tool": {
-                return [
-                  `【tool】${value.name}${value.description ? ` (${value.description})` : ""}`,
-                  getToolName(value.name),
-                ];
+                const toolName = getToolName(value.name);
+                const isRenamed = value.name !== toolName;
+                const fullDescription =
+                  isRenamed && value.description
+                    ? `${value.name} (${value.description})`
+                    : value.description
+                      ? value.description
+                      : value.name;
+                return [`【tool】${toolName}`, fullDescription];
               }
             }
           }),
