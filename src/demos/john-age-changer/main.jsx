@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode, useCallback, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { z } from "zod";
 import { useAgent, useAgentState, useAgentTool } from "../../../lib";
@@ -7,12 +7,20 @@ import "./index.css";
 function App() {
   const [apiKey, setApiKey] = useState(localStorage.getItem("react-agent-hooks:openai-api-key") ?? "");
   const agent = useAgent({ apiKey });
-  const [userProfile, setUserProfile] = useAgentState("User profile", { name: "John", age: 24 });
+  const [person, setPerson] = useAgentState("Person", {
+    name: "John",
+    age: 24,
+  });
+
   useAgentTool(
-    "Update user age to be older or younger",
-    z.object({ newAge: z.number().describe("the new age after the update").max(150).min(0) }),
-    (update) => setUserProfile((prev) => ({ ...prev, age: update.newAge })),
+    `Update the person's age to be older or younger`,
+    z.object({
+      delta: z.number().describe("positive to grow older, negative to grow younger"),
+    }),
+    (update) => setPerson((prev) => ({ ...prev, age: prev.age + update.delta })),
   );
+
+  const runAgent = useCallback((event) => agent.run(event.target.textContent), []);
 
   return (
     <div>
@@ -31,20 +39,12 @@ function App() {
       <br />
       <br />
       <div>
-        {userProfile.name} is currently {userProfile.age} years old
+        {person.name} is currently {person.age} years old
       </div>
-      <button onClick={() => agent.run("Grow much younger")} type="button">
-        Grow much younger
-      </button>
-      <button onClick={() => agent.run("Grow younger")} type="button">
-        Grow younger
-      </button>
-      <button onClick={() => agent.run("Grow older")} type="button">
-        Grow older
-      </button>
-      <button onClick={() => agent.run("Grow much older")} type="button">
-        Grow much older
-      </button>
+      <button onClick={runAgent}>Grow much younger</button>
+      <button onClick={runAgent}>Grow younger</button>
+      <button onClick={runAgent}>Grow older</button>
+      <button onClick={runAgent}>Grow much older</button>
     </div>
   );
 }
