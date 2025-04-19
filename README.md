@@ -222,7 +222,7 @@ Short verbal answer/confirmation in the end.
 
 ### Scale-up with Context
 
-The `AgentContext` is optionally React Context to help you hierarchically organizing states and tools.
+The `AgentContext` is an optional React Context to help you hierarchically organizing states and tools.
 This prevents naming collisions and reduces agent confusion from too many similar states and tools.
 
 ```tsx
