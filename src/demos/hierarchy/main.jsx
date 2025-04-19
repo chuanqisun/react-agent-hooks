@@ -2,7 +2,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { z } from "zod";
 import { AgentContext, useAgent, useAgentDebug, useAgentState, useAgentTool } from "../../../lib";
-import "./hierarchy.css";
+import "./index.css";
 
 function App() {
   const [apiKey, setApiKey] = useState(localStorage.getItem("react-agent-hooks:openai-api-key") ?? "");

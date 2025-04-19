@@ -2,7 +2,7 @@ import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { z } from "zod";
 import { useAgent, useAgentState, useAgentTool } from "../../../lib";
-import "./idea-counter.css";
+import "./index.css";
 
 function App() {
   const [apiKey, setApiKey] = useState(localStorage.getItem("react-agent-hooks:openai-api-key") ?? "");
