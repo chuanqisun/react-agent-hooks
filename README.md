@@ -1,6 +1,10 @@
 # React Agent Hooks
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)
+
+| Agentic Counter demo | Agentic Todo demo |
+|:---------|:---------|
+| [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-agent-counter?file=src%2Fmain.jsx)    | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)   |
+
 
 Turn React Hooks into LLM Tools
 
