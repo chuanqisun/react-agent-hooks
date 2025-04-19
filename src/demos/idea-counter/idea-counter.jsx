@@ -15,19 +15,27 @@ function App() {
 
   return (
     <div>
-      <label>Open AI API Key</label>
+      <label htmlFor="api-key">Open AI API Key (doesn't leave browser)</label>
+      <br />
       <input
+        id="api-key"
         type="password"
+        autoComplete="off"
         value={apiKey}
         onChange={(e) => {
           setApiKey(e.target.value);
           localStorage.setItem("react-agent-hooks:openai-api-key", e.target.value);
         }}
       />
-
+      <br />
+      <br />
       <div>{idea}</div>
-      <button onClick={beMoreCreative}>Be more creative</button>
-      <button onClick={beMoreConservative}>Be more conservative</button>
+      <button onClick={beMoreCreative} type="button">
+        Be more creative
+      </button>
+      <button onClick={beMoreConservative} type="button">
+        Be more conservative
+      </button>
     </div>
   );
 }
