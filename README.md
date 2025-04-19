@@ -1,5 +1,6 @@
 # React Agent Hooks
 
+Agentic TODO app demo:
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)
 
 Turn React Hooks into LLM Tools
@@ -257,7 +258,7 @@ function HeaderContent() {
 }
 ```
 
-### Future Work
+## Future Work
 
 Render to MCP Server
 
@@ -285,3 +286,7 @@ function main() {
   });
 }
 ```
+
+## Reference
+
+Blog article: [React (hooks) is All You Need](https://stackdiver.com/posts/react-hooks-is-all-you-need/)
