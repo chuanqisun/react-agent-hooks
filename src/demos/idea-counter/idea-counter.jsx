@@ -30,11 +30,11 @@ function App() {
       <br />
       <br />
       <div>{idea}</div>
-      <button onClick={beMoreCreative} type="button">
-        Be more creative
-      </button>
       <button onClick={beMoreConservative} type="button">
         Be more conservative
+      </button>
+      <button onClick={beMoreCreative} type="button">
+        Be more creative
       </button>
     </div>
   );
