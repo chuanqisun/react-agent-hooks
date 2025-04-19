@@ -1,6 +1,5 @@
 # React Agent Hooks
 
-Agentic TODO app demo:
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)
 
 Turn React Hooks into LLM Tools
