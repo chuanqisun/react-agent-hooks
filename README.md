@@ -57,6 +57,8 @@ export function MyComponent() {
 }
 ```
 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/edit/react-agentic-counter?file=src%2Fmain.jsx)
+
 ## Get Started
 
 ```sh
