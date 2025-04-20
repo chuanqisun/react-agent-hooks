@@ -1,10 +1,8 @@
 # React Agent Hooks
 
-
-| Agentic Counter demo | Agentic Todo demo |
-|:---------|:---------|
-| [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-agentic-counter?file=src%2Fmain.jsx) | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx)   |
-
+| Agentic Counter demo                                                                                                                                        | Agentic Todo demo                                                                                                                                                    |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-agentic-counter?file=src%2Fmain.jsx) | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx) |
 
 Turn React Hooks into LLM Tools
 
@@ -46,15 +44,14 @@ export function MyComponent() {
   const agent = useAgent({ apiKey: "******" });
   const [name, setName] = useAgentState("name", "John Doe");
   const [age, setAge] = useAgentState("age", 30);
-  const increase = useAgentTool("increase-age", z.object({ increment: z.number() }), (increment) =>
-    setAge((prev) => prev + increment),
-  );
+  useAgentTool("adjust-age", z.object({ delta: z.number() }), (delta) => setAge((prev) => prev + delta));
 
   return (
     <div>
       <h1>{name}</h1>
       <p>{age}</p>
-      <button onClick={() => agent.run("increase the age")}>Increase Age</button>
+      <button onClick={() => agent.run("be younger")}>Be younger</button>
+      <button onClick={() => agent.run("be older")}>Be older</button>
     </div>
   );
 }
