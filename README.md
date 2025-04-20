@@ -23,13 +23,14 @@ import { useCallback, useState } from "react";
 function MyComponent() {
   const [name, setName] = useState("John Doe");
   const [age, setAge] = useState(30);
-  const increase = useCallback((increment) => setAge((prev) => prev + increment), []);
+  const adjust = useCallback((delta) => setAge((prev) => prev + delta), []);
 
   return (
     <div>
       <h1>{name}</h1>
       <p>{age}</p>
-      <button onClick={() => increase(5)}>Increase Age</button>
+      <button onClick={() => adjust(-1)}>Be younger</button>
+      <button onClick={() => adjust(1)}>Be older</button>
     </div>
   );
 }
@@ -42,9 +43,10 @@ import { useAgent, useAgentState, useAgentTool } from "react-agent-hooks";
 
 export function MyComponent() {
   const agent = useAgent({ apiKey: "******" });
-  const [name, setName] = useAgentState("name", "John Doe");
-  const [age, setAge] = useAgentState("age", 30);
-  useAgentTool("adjust-age", z.object({ delta: z.number() }), (delta) => setAge((prev) => prev + delta));
+  const [name, setName] = useAgentState("Name", "John Doe");
+  const [age, setAge] = useAgentState("Age", 30);
+  const adjust = useCallback((delta) => setAge((prev) => prev + delta), []);
+  useAgentTool("Change age", z.number().describe("the delta of age change"), adjust);
 
   return (
     <div>
