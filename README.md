@@ -1,6 +1,6 @@
 # React Agent Hooks
 
-| Agentic Counter demo                                                                                                                                        | Agentic Todo demo                                                                                                                                                    |
+| Agentic Counter Demo                                                                                                                                        | Agentic Todo Demo                                                                                                                                                    |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-agentic-counter?file=src%2Fmain.jsx) | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/chuanqisun/react-agent-hooks?file=src%2Fmain.jsx) |
 
