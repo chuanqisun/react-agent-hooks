@@ -4,7 +4,8 @@ import { useRef } from "react";
 import { useAgentContext } from "./use-agent-context";
 
 export function useAgent(options: { apiKey: string }) {
-  const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: options.apiKey });
+  const agentOptions = options;
+  const openai = new OpenAI({ dangerouslyAllowBrowser: true, apiKey: agentOptions.apiKey });
   const agentContext = useAgentContext();
   const activeControllers = useRef<AbortController[]>([]);
 
@@ -13,6 +14,11 @@ export function useAgent(options: { apiKey: string }) {
     options?: {
       model?: ChatModel;
       signal?: AbortSignal;
+      /**
+       * Can model call multiple tools in parallel?
+       * @default false because we want the state change to be linear
+       */
+      enableParallelToolCalls?: boolean;
     },
   ) => {
     const abortController = new AbortController();
@@ -42,6 +48,7 @@ Short verbal answer/confirmation in the end.
           },
         ],
         tools: agentContext.getTools(),
+        parallel_tool_calls: !!options?.enableParallelToolCalls,
       },
       {
         signal: options?.signal,

@@ -1,3 +1,7 @@
+# v1.0.0-beta.25
+
+- Changed: parallel tool-use is disabled by default
+
 # v1.0.0-beta.24
 
 - Changed: improve tool rendering to agent
