@@ -1,6 +1,6 @@
 import OpenAI, { APIUserAbortError } from "openai";
+import type { FunctionToolCallArgumentsDoneEvent } from "openai/lib/ChatCompletionStream.mjs";
 import type { ChatModel } from "openai/resources.mjs";
-import type { FunctionToolCallArgumentsDoneEvent } from "openai/src/lib/ChatCompletionStream.js";
 import { useRef, useState } from "react";
 import { useAgentContext } from "./use-agent-context";
 
