@@ -39,6 +39,8 @@ export function useAgent(options: { apiKey: string }) {
     activeControllers.current.push(abortController);
 
     let isFinished = false;
+    let isChatStarted = false;
+    let isToolUseStarted = false;
     let previousToolMessages: any[] = [];
     let endTask: (finalResponse: string) => void | undefined;
 
@@ -106,8 +108,15 @@ In the end, you must use the special "talk_to_user" tool to provide a short verb
 
         task.on("tool_calls.function.arguments.delta", (args) => {
           if (args.name === "talk_to_user") {
-            console.log("[chat]", args);
+            if (isChatStarted) return;
+            console.log("[chat] started");
             setStatus("chat");
+            isChatStarted = true;
+          } else {
+            if (isToolUseStarted) return;
+            console.log("[tool-use] started");
+            setStatus("tool-use");
+            isToolUseStarted = true;
           }
         });
 
@@ -115,8 +124,10 @@ In the end, you must use the special "talk_to_user" tool to provide a short verb
           const isGeneratingChat = args.name === "talk_to_user";
           if (!isGeneratingChat) {
             console.log("[tool-use]", args);
-            setStatus("tool-use");
             options?.onToolUsed?.(args);
+          } else {
+            console.log("[chat] done", args);
+            setStatus("idle");
           }
         });
 
