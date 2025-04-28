@@ -54,15 +54,7 @@ function App() {
   const [agentPrompt, setAgentPrompt] = useState("");
   const [lastAgentOutput, setLastAgentOutput] = useState(null);
 
-  const handleSendToAgent = (prompt) =>
-    agent.run(prompt).then(async (stream) => {
-      setLastAgentOutput("");
-      for await (const chunk of stream) {
-        const content = chunk.choices?.[0]?.delta?.content;
-        if (!content) continue;
-        setLastAgentOutput((prev) => prev + content);
-      }
-    });
+  const handleSendToAgent = (prompt) => agent.run(prompt, { onChatResponse: setLastAgentOutput });
 
   // print shared space
   useEffect(() => {
@@ -110,6 +102,8 @@ function App() {
           />
 
           <button onClick={() => handleSendToAgent(agentPrompt)}>▶️ Send to agent</button>
+          <div>Status: {agent.status}</div>
+          {lastAgentOutput ? <div>🤖 {lastAgentOutput}</div> : null}
 
           <b>Examples</b>
           <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Remind me to pick up kids at 5</button>
@@ -123,8 +117,6 @@ function App() {
           <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Mark all shoppping tasks as done</button>
           <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Mark last two items as done</button>
           <button onClick={(e) => handleSendToAgent(e.target.textContent)}>Delete all the "done" tasks</button>
-
-          {lastAgentOutput ? <div>🤖 {lastAgentOutput}</div> : null}
         </div>
       </div>
       <div className="shared-space">
