@@ -1,4 +1,4 @@
-# v1.0.0-beta.26
+# v1.0.0-beta.27
 
 - Breaking change: `useAgent` now returns a simplified `run` method with agent lifecycle hooks as parameters
 - Added: `status` property in the agent returned by `useAgent`
