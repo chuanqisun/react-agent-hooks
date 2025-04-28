@@ -134,7 +134,6 @@ In the end, you must use the special "talk_to_user" tool to provide a short verb
       if (error instanceof APIUserAbortError) return; // abort is expected
       throw error;
     } finally {
-      console.log("finalized");
       setStatus("idle");
       activeControllers.current = activeControllers.current.filter((controller) => controller !== abortController);
     }
