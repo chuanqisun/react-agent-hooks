@@ -1,3 +1,8 @@
+# v1.0.0-beta.26
+
+- Breaking change: `useAgent` now returns a simplified `run` method with agent lifecycle hooks as parameters
+- Added: `status` property in the agent returned by `useAgent`
+
 # v1.0.0-beta.25
 
 - Changed: parallel tool-use is disabled by default

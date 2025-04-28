@@ -11,15 +11,11 @@ function App() {
   const [agentPrompt, setAgentPrompt] = useState("");
   const [lastAgentOutput, setLastAgentOutput] = useState(null);
 
-  const handleSendToAgent = (prompt) =>
-    agent.run(prompt).then(async (stream) => {
-      setLastAgentOutput("");
-      for await (const chunk of stream) {
-        const content = chunk.choices?.[0]?.delta?.content;
-        if (!content) continue;
-        setLastAgentOutput((prev) => prev + content);
-      }
+  const handleSendToAgent = (prompt) => {
+    agent.run(prompt, {
+      onChatResponse: setLastAgentOutput,
     });
+  };
 
   // print shared space
   useEffect(() => {
