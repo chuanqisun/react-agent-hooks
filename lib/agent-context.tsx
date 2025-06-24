@@ -1,5 +1,6 @@
 import React, { createContext, useContext, type PropsWithChildren } from "react";
 import type { ZodSchema } from "zod";
+import { ReactiveContext } from "./reactive-context";
 
 export type AgentItem = AgentStateItem | AgentToolItem;
 export interface AgentStateItem {
@@ -28,7 +29,9 @@ export const AgentContextInternal = createContext<ExplicitAgentContext>({
   breadcrumbs: [] as string[],
 });
 
-export const implicitRootAgentContext = new Map<string, AgentItem>();
+const rawRootAgentContext = new Map<string, AgentItem>();
+
+export const implicitRootAgentContext = new ReactiveContext({ rawContext: rawRootAgentContext });
 
 export type AgentContextProps = PropsWithChildren & {
   name: string;

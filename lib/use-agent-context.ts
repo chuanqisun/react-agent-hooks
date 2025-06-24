@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { stringify } from "yaml";
 import zodToJsonSchema from "zod-to-json-schema";
 import { implicitRootAgentContext, type AgentItem, type AgentToolItem } from "./agent-context";
@@ -9,7 +10,7 @@ import { zodParseJSON } from "./zod-parse-json";
  */
 export function useAgentContext() {
   const getStates = () => {
-    const compiledContext = compileContext(implicitRootAgentContext);
+    const compiledContext = compileContext(implicitRootAgentContext.raw());
     const view = compiledContext.map(([prefix, items]) => {
       return [
         ["root", prefix].filter(Boolean).join("::"),
@@ -44,7 +45,7 @@ export function useAgentContext() {
   };
 
   const getTools = () => {
-    const compiledContext = compileContext(implicitRootAgentContext);
+    const compiledContext = compileContext(implicitRootAgentContext.raw());
     return compiledContext.flatMap(([_prefix, items]) => {
       return items
         .filter((item) => item.type === "tool")
@@ -77,7 +78,21 @@ ${stringify(getStates())}
     });
   };
 
+  const [context, setContext] = useState(implicitRootAgentContext.raw());
+  useEffect(() => {
+    const abortController = new AbortController();
+    implicitRootAgentContext.addEventListener(
+      "change",
+      () => {
+        setContext(implicitRootAgentContext.raw());
+      },
+      { signal: abortController.signal },
+    );
+    return () => abortController.abort();
+  }, []);
+
   return {
+    context,
     getStates,
     getTools,
     stringifyStates,

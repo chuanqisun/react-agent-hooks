@@ -74,7 +74,7 @@ export function useAgent(options: { apiKey: string }) {
       setStatus("started");
 
       while (!abortController.signal.aborted && !isFinished) {
-        const task = openai.beta.chat.completions.runTools(
+        const task = openai.chat.completions.runTools(
           {
             stream: true,
             model: options?.model ?? "gpt-4.1",
