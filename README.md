@@ -190,7 +190,7 @@ export function useMyAgent() {
   const agentContext = useAgentContext();
 
   const run = async (prompt: string) => {
-    const task = openai.beta.chat.completions.runTools({
+    const task = openai.chat.completions.runTools({
       stream: true,
       model: "gpt-4.1",
       messages: [
