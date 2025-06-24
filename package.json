@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "openai": "^5.7.0",
+    "rxjs": "^7.8.2",
     "yaml": "^2.8.0",
     "zod-to-json-schema": "^3.24.5"
   },
