@@ -1,4 +1,4 @@
-# v1.0.0-beta.29
+# v1.0.0-beta.30
 
 - Added: `useAgentContext` now provided a `context` property that contains the latest properties about the agent
 
