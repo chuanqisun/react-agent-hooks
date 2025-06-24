@@ -84,7 +84,8 @@ ${stringify(getStates())}
     implicitRootAgentContext.addEventListener(
       "change",
       () => {
-        setContext(implicitRootAgentContext.raw());
+        const shallowClonedMap = new Map(implicitRootAgentContext.raw());
+        setContext(shallowClonedMap);
       },
       { signal: abortController.signal },
     );
